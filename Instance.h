@@ -12,13 +12,15 @@ class Instance {
 public:
     int qt_vertices;
     int veiculos;
-    double tmax;
+    double t_max;
     int t_prot;
     int t_parada;
+    int velocidade;
     vector<double> score_vertices;
     vector<vector<double> > distancia_matriz;
 
-    Instance(const string &filename, int &tprot, int &tparada, double &velocidade);
+    Instance(const string &filename);
+    friend ostream &operator<<(ostream &os, const Instance &instance);
 };
 
 #endif // Instance_H

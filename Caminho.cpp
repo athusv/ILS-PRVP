@@ -30,7 +30,7 @@ void Caminho::incert(vector<double> &best_insert, vector<map<double, int> > &vis
 }
 
 void Caminho::excluir(vector<double> &exclui_vertice, vector<map<double, int>> &visited_vertices, double &score_s, double &custo_s) 
-    {
+{
     int indice = static_cast<int>(exclui_vertice[3]);
     double score_vertice = exclui_vertice[1];
     // id, score, impacto, indice_rota, indice_visited
@@ -41,13 +41,11 @@ void Caminho::excluir(vector<double> &exclui_vertice, vector<map<double, int>> &
 
     auto it = visited_vertices[static_cast<int>(exclui_vertice[0])].find(visita_custo[indice] + t_prot);
     visited_vertices[static_cast<int>(exclui_vertice[0])].erase(it);
-
     // cout << "vertice indicado - " << route[indice] << endl;
     route.erase(route.begin() + indice);
     paradas.erase(paradas.begin() + indice);
     visita_custo.erase(visita_custo.begin() + indice);
     push_hotspots.erase(push_hotspots.begin() + indice);
-
     atualizar_visited_vertices(indice, route.size() - 1, exclui_vertice[2], visited_vertices);
     atualizar_push_hotspots(visited_vertices);
 }
@@ -112,6 +110,7 @@ void Caminho::atualizar_push_hotspots(vector<map<double, int>> &visited_vertices
         int vertice = route[i];
 
         auto it = visited_vertices[route[i]].find(visita_custo[i] + t_prot);
+
         auto next_it = next(it);
         auto prev_it = prev(it);
 

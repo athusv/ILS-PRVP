@@ -13,7 +13,8 @@
 
 class Perturbacao {
 public:
-    static Sol& perturbacao(Instance& grafo, Sol& s0, std::mt19937& gen);
+    static Sol& perturbacao(Instance& grafo, Sol& S, std::mt19937& gen);
+    static Sol &perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &gen, double porcentagem_perturbacao);
 };
 
 #endif // PERTURBACAO_H

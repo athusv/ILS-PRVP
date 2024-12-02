@@ -24,13 +24,37 @@ int Utils::max_score(const std::vector<int>& lista_candidatos, const std::vector
     return index_max;
 }
 
+int Utils::min_custo(const std::vector<int> &lista_candidatos, const vector<vector<double>> &distancia_matriz, int &last_vertice){
+    double min = distancia_matriz[last_vertice][lista_candidatos[0]];
+    int index_min = lista_candidatos[0];
+    for (auto candidato : lista_candidatos){
+        if (distancia_matriz[last_vertice][candidato] < min){
+            min = distancia_matriz[last_vertice][candidato];
+            index_min = candidato;
+        }
+    }
+    return index_min;
+}
+
+int Utils::cost_benefit(const std::vector<int> &lista_candidatos,const vector<double>& score_vertices, const vector<vector<double>> &distancia_matriz, int &last_vertice){
+    double benefit = -1;
+    int index_benefit = 0;
+    for (auto candidato : lista_candidatos){
+        if (score_vertices[candidato]/distancia_matriz[last_vertice][candidato] > benefit){
+            benefit = score_vertices[candidato] / distancia_matriz[last_vertice][candidato];
+            index_benefit = candidato;
+        }
+    }
+    return index_benefit;
+}
+
 std::vector<int> Utils::make_lista(Instance& grafo, Caminho& rota, std::vector<std::map<double, int>>& visited_vertices) {
     std::vector<int> lista_de_candidatos;
     for (int i = 1; i < grafo.qt_vertices; i++) {
         if (visited_vertices[i].empty() || doubleLessOrEqual(visited_vertices[i].rbegin()->first, rota.custo)) {
             double distancia_1 = grafo.distancia_matriz[rota.route.back()][i];
             double distancia_2 = grafo.distancia_matriz[i][0];
-            if (rota.custo + distancia_1 + distancia_2 + rota.plus_parada < grafo.tmax) {
+            if (rota.custo + distancia_1 + distancia_2 + rota.plus_parada < grafo.t_max) {
                 lista_de_candidatos.push_back(i);
             }
         }
@@ -48,7 +72,7 @@ std::vector<double> Utils::p_excluir(Instance& grafo, std::vector<std::map<doubl
     if (rota.paradas[i] == 1)
         impacto -= grafo.t_parada;
 
-    if (rota.custo + impacto > grafo.tmax)
+    if (rota.custo + impacto > grafo.t_max)
         return exclui_vertice;
 
     bool possibilidade_visita;
@@ -69,7 +93,8 @@ std::vector<double> Utils::p_excluir(Instance& grafo, std::vector<std::map<doubl
     return exclui_vertice;
 }
 
-vector<vector<double>> Utils::swap_perturbacao(Instance &grafo, Sol &s0, Caminho &rota, int i)
+//Excluir e adaptar a função q ja existe
+bool Utils::swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i)
 {
     vector<vector<double>> swap(2, vector<double>(6, -1));
     double score_v1;
@@ -95,7 +120,6 @@ vector<vector<double>> Utils::swap_perturbacao(Instance &grafo, Sol &s0, Caminho
     dist1_remove_v1 = grafo.distancia_matriz[anterior1][v1]; // Arestas que serão removidas V1
     dist2_remove_v1 = grafo.distancia_matriz[v1][proximo1];
     vertice_parada_v1 = (rota.paradas[i]) ? grafo.t_parada : 0; // Se tiver parada, plus de 15 minutos
-
     for (int n = 0; n < 2; n++)
     {
         rota.plus_parada = (n == 1) ? 0 : grafo.t_parada;
@@ -112,24 +136,24 @@ vector<vector<double>> Utils::swap_perturbacao(Instance &grafo, Sol &s0, Caminho
 
             impacto1 = -dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1 + dist1_add_v2 + dist2_add_v2 + rota.plus_parada;
 
-            // Verifica se o novo custo ultrapassa o Tmax
-            if (!Utils::doubleLessOrEqual(rota.custo + impacto1, grafo.tmax))
+            // Verifica se o novo custo ultrapassa o T_max
+            if (!Utils::doubleLessOrEqual(rota.custo + impacto1, grafo.t_max))
             {
                 // cout << "EXCEDEU TEMPO LIMITE" << endl;
-                continue; // Custo ultrapassa o Tmax, não tem como fazer o swap
+                continue; // Custo ultrapassa o T_max, não tem como fazer o swap
             }
 
             double impacto1_if_equals = 0;
             bool local_visita = false;
-            if (s0.visited_vertices[v2].empty())
+            if (S.visited_vertices[v2].empty())
             {
                 local_visita = true;
             }
             else
             {
-                auto it = s0.visited_vertices[v2].lower_bound(
+                auto it = S.visited_vertices[v2].lower_bound(
                     rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada + grafo.t_prot);
-                if (it == s0.visited_vertices[v2].end())
+                if (it == S.visited_vertices[v2].end())
                 {
                     auto it_prev = prev(it);
                     if (Utils::doubleLessOrEqual(it_prev->first, rota.visita_custo[i - 1] + dist1_add_v2))
@@ -141,7 +165,7 @@ vector<vector<double>> Utils::swap_perturbacao(Instance &grafo, Sol &s0, Caminho
                         local_visita = false;
                     }
                 }
-                else if (it == s0.visited_vertices[v2].begin())
+                else if (it == S.visited_vertices[v2].begin())
                 {
                     if (it->second == rota.id) impacto1_if_equals += impacto1;
                     if (Utils::doubleLessOrEqual(rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada + grafo.t_prot, it->first - grafo.t_prot + impacto1_if_equals))
@@ -196,11 +220,15 @@ vector<vector<double>> Utils::swap_perturbacao(Instance &grafo, Sol &s0, Caminho
                 swap[1][4] = rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada; // Novo tempo de visita
                 swap[1][5] = (rota.plus_parada == grafo.t_parada) ? 1 : 0; // Indica se o vértice é uma parada
 
-                return swap;
+                rota.excluir(swap[0], S.visited_vertices, S.score, S.custo);
+                rota.incert(swap[1], S.visited_vertices, S.score, S.custo);
+                return true;
+                // return swap;
             }
         }
     }
-    return swap;
+    return false;
+    // return swap;
 }
 
 std::vector<double> Utils::p_insert(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, const Caminho& rota, int i, int vertice_insert) {
@@ -214,7 +242,7 @@ std::vector<double> Utils::p_insert(Instance& grafo, std::vector<std::map<double
     int parada = (rota.paradas[i]) ? grafo.t_parada : 0;
     double impacto = dist1 + dist2 + grafo.t_parada - dist3 - dist4 - parada;
 
-    if (rota.custo + impacto > grafo.tmax)
+    if (rota.custo + impacto > grafo.t_max)
         return vert_incert;
 
     int local_visita = -1;

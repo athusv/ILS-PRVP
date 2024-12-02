@@ -1,26 +1,44 @@
-cmake_minimum_required(VERSION 3.16)
-project(MyProject)
+# Versão mínima do CMake necessária
+cmake_minimum_required(VERSION 3.10)
 
-# Define o padrão C++17
+# Nome do projeto e definição do padrão de C++
+project(my_program LANGUAGES CXX)
+
+# Definindo o padrão de compilação C++
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Adiciona os arquivos de código-fonte ao executável
-add_executable(MyProject
-    local_search_patrulhamento.cpp
-    Instance.cpp
-    Caminho.cpp
-    Sol.cpp
-    Busca_local.cpp
-    Perturbacao.cpp
-    Utils.cpp
+# Habilitando avisos
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+# Lista de arquivos fonte
+set(SRCS
+        local_search_patrulhamento.cpp
+        Instance.cpp
+        Caminho.cpp
+        Sol.cpp
+        Busca_local.cpp
+        Perturbacao.cpp
+        Utils.cpp
 )
 
-# Adiciona uma regra customizada para executar o programa com os argumentos fornecidos
+# Adicionando o executável
+add_executable(${PROJECT_NAME} ${SRCS})
+
+# Definindo o alvo e flags de compilação
+target_compile_options(${PROJECT_NAME} PRIVATE -std=c++17 -Wall)
+
+# Regra de limpeza dos arquivos objeto e executáveis
+add_custom_target(clean_files
+        COMMAND ${CMAKE_COMMAND} -E remove ${PROJECT_NAME}
+        COMMAND ${CMAKE_COMMAND} -E remove *.o
+        COMMENT "Limpeza dos arquivos objeto e executáveis."
+)
+
+# Adicionando um comando para rodar o programa sem parâmetros fixos
 add_custom_target(run
-    COMMAND MyProject output_farol.txt 120 15 20 120
-    DEPENDS MyProject
-    WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+        COMMAND ${CMAKE_COMMAND} -E echo "Executando ${PROJECT_NAME}"
+        COMMAND ${PROJECT_NAME}
+        DEPENDS ${PROJECT_NAME}
+        COMMENT "Executando o programa."
 )
-
-# Remover esta linha incorreta
-# add_executable(MyProject ${C:\Users\athus\Faculdade\6 periodo\PIBIT\solucao\pibit-rotas-pm})

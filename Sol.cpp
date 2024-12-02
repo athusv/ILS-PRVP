@@ -127,9 +127,9 @@ bool Sol::checa_custo(Instance &grafo, string &chamou) {
             cout<< "Rota " << rota.id<< " - Custo incompativel | aux_custo = "<< aux_custo << " - Custo = "<< rota.custo<<endl;
             return false;
         }
-        if(!Utils::doubleLessOrEqual(rota.custo, grafo.tmax)){
+        if(!Utils::doubleLessOrEqual(rota.custo, grafo.t_max)){
             cout << chamou << endl;
-            cout << "Rota " << rota.id << " Ultrapassou Tmax | Tmax = "<<grafo.tmax<< " Custo = " << rota.custo << endl;
+            cout << "Rota " << rota.id << " Ultrapassou T_max | T_max = "<<grafo.t_max<< " Custo = " << rota.custo << endl;
             return false;
         }
         total_custo += aux_custo;
@@ -249,10 +249,15 @@ void Sol::print_solucao(Instance &grafo)
             {
                 cout << "Base," << r.visita_custo[i] << "," << r.paradas[i] << endl;
                 continue;
+            }else if(i == r.route.size()-1){
+                cout << "Base," << r.visita_custo[i] << "," << r.paradas[i] << endl;
+                continue;
             }
             cout << r.route[i] << "," << r.visita_custo[i] << "," << r.paradas[i] << endl;
         }
     }
+    cout <<endl;
+    // print_visited(0, grafo.qt_vertices);
 }
 
 bool Sol::operator<(const Sol &s) const {
