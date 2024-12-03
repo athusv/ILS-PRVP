@@ -1,0 +1,11 @@
+Resultados da instância 21_1_360_180_20.txt
+Execução 1 completa.
+Execução 2 completa.
+Execução 3 completa.
+Execução 4 completa.
+**** Instância: 21_1_360_180_20.txt -- Seed da melhor execução: 2180698325
+**** Instância: 21_1_360_180_20.txt -- Média de iterações: 64209.000
+**** Instância: 21_1_360_180_20.txt -- Pontuação do Construtivo da melhor execução: 233.667
+**** Instância: 21_1_360_180_20.txt -- Média de pontuação ILS: 233.667
+**** Instância: 21_1_360_180_20.txt -- Melhor pontuação: 535.333
+**** Instância: 21_1_360_180_20.txt -- Melhoria na melhor execução: 129.101%

@@ -1,0 +1,34 @@
+Resultados da instância 10_1_360_360_20.txt
+Seed aleatória gerada: 3109237798
+Iteração: 840990
+Seed: 3109237798 | Tempo de Execução: 300s
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/10_1_360_360_20.txt | Vértices: 10 | Veículos: 1
+Solução Construtivo - Score: 110.667 | Custo: 6284.46
+Solução ILS - Score: 160 | Custo: 8789.01
+Melhoria de 44.5783%
+Execução 1 completa.
+Seed aleatória gerada: 1611907007
+Iteração: 843034
+Seed: 1611907007 | Tempo de Execução: 300s
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/10_1_360_360_20.txt | Vértices: 10 | Veículos: 1
+Solução Construtivo - Score: 153.333 | Custo: 7093.88
+Solução ILS - Score: 160 | Custo: 8881.63
+Melhoria de 4.34783%
+Execução 2 completa.
+Seed aleatória gerada: 2710017920
+Iteração: 836910
+Seed: 2710017920 | Tempo de Execução: 300s
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/10_1_360_360_20.txt | Vértices: 10 | Veículos: 1
+Solução Construtivo - Score: 140 | Custo: 6145.89
+Solução ILS - Score: 160 | Custo: 8789.01
+Melhoria de 14.2857%
+Execução 3 completa.
+**** Instância: 10_1_360_360_20.txt -- Seed da melhor execução: 3109237798
+**** Instância: 10_1_360_360_20.txt -- Média de iterações: 840311.333
+**** Instância: 10_1_360_360_20.txt -- Pontuação do Construtivo da melhor execução: 110.667
+**** Instância: 10_1_360_360_20.txt -- Média de pontuação ILS: 160.000
+**** Instância: 10_1_360_360_20.txt -- Melhor pontuação: 160
+**** Instância: 10_1_360_360_20.txt -- Melhoria na melhor execução: 44.5783%

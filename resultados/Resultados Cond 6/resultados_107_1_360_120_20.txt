@@ -1,0 +1,10 @@
+Resultados da instância 107_1_360_120_20.txt
+Execução 1 completa.
+Execução 2 completa.
+Execução 3 completa.
+**** Instância: 107_1_360_120_20.txt -- Seed da melhor execução: 2165988466
+**** Instância: 107_1_360_120_20.txt -- Média de iterações: 9340.333
+**** Instância: 107_1_360_120_20.txt -- Pontuação do Construtivo da melhor execução: 1516.33
+**** Instância: 107_1_360_120_20.txt -- Média de pontuação ILS: 3204.996
+**** Instância: 107_1_360_120_20.txt -- Melhor pontuação: 3225.33
+**** Instância: 107_1_360_120_20.txt -- Melhoria na melhor execução: 112.706%

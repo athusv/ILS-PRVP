@@ -1,0 +1,11 @@
+Resultados da instância 47_5_360_120_20.txt
+Execução 1 completa.
+Execução 2 completa.
+Execução 3 completa.
+Execução 4 completa.
+**** Instância: 47_5_360_120_20.txt -- Seed da melhor execução: 3071034827
+**** Instância: 47_5_360_120_20.txt -- Média de iterações: 79029.000
+**** Instância: 47_5_360_120_20.txt -- Pontuação do Construtivo da melhor execução: 1805.67
+**** Instância: 47_5_360_120_20.txt -- Média de pontuação ILS: 4789.917
+**** Instância: 47_5_360_120_20.txt -- Melhor pontuação: 5123.67
+**** Instância: 47_5_360_120_20.txt -- Melhoria na melhor execução: 183.755%

@@ -1,4 +1,4 @@
-*.txt
+.txt
 *.o
 /cmake-build-debug
 /.vscode

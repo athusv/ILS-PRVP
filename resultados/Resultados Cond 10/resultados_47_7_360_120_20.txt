@@ -1,0 +1,33 @@
+Resultados da instância 47_7_360_120_20.txt
+Iteração: 41603
+Seed: 4273080268 | Tempo de Execução: 300s
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/47_7_360_120_20.txt | Vértices: 47 | Veículos: 7
+Solução Construtivo - Score: 1614 | Custo: 33592.3
+Solução ILS - Score: 4554.67 | Custo: 68683.6
+Melhoria de 182.197%
+Execução 1 completa.
+
+Iteração: 39156
+Seed: 1423358299 | Tempo de Execução: 300s
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/47_7_360_120_20.txt | Vértices: 47 | Veículos: 7
+Solução Construtivo - Score: 1835.33 | Custo: 38031.4
+Solução ILS - Score: 4916.67 | Custo: 81442.8
+Melhoria de 167.89%
+Execução 2 completa.
+
+Iteração: 38822
+Seed: 1584953145 | Tempo de Execução: 300s
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/47_7_360_120_20.txt | Vértices: 47 | Veículos: 7
+Solução Construtivo - Score: 1775.33 | Custo: 37337.5
+Solução ILS - Score: 4787.67 | Custo: 82270.3
+Melhoria de 169.677%
+Execução 3 completa.
+**** Instância: 47_7_360_120_20.txt -- Seed da melhor execução: 1423358299
+**** Instância: 47_7_360_120_20.txt -- Média de iterações: 39860.333
+**** Instância: 47_7_360_120_20.txt -- Pontuação do Construtivo da melhor execução: 1835.33
+**** Instância: 47_7_360_120_20.txt -- Média de pontuação ILS: 4753.003
+**** Instância: 47_7_360_120_20.txt -- Melhor pontuação: 4916.67
+**** Instância: 47_7_360_120_20.txt -- Melhoria na melhor execução: 167.89%
