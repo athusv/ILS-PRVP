@@ -71,6 +71,13 @@ void Guloso(Instance &grafo, Sol &s0, mt19937 &gen)
             rotas_prontas.push(rota);
             s0.custo += rota.custo;
             s0.score += rota.score;
+
+            s0.cont_vizinhanca["best_incert"] = 0;
+            s0.cont_vizinhanca["swap_inter"] = 0;
+            s0.cont_vizinhanca["swap_intra"] = 0;
+            s0.cont_vizinhanca["swap_out"] = 0;
+            s0.cont_vizinhanca["para"] = 0;
+
             // rota.print_push();
             continue;
         }
@@ -405,7 +412,7 @@ int main(int argc, char *argv[])
 
     // Instance grafo("C:/Users/athus/Faculdade/6 periodo/PIBIT/solucao/pibit-rotas-pm/misc/ILS-algoritm/" + instancia, t_prot, t_parada, velocidade);
     Instance grafo(instancia); //nome da instancia, t_prot, t_parada
-    cout << grafo<<endl;
+    // cout << grafo<<endl;
     // Solução inicial
     Sol s0(grafo);
     // cout<< grafo<<endl;
@@ -418,18 +425,25 @@ int main(int argc, char *argv[])
     string chamou = "Construtivo";
     s0.checa_solucao(grafo, chamou);
 
-    double tempo_maximo = 60.0 * 3; //Em segundos
+    double tempo_maximo = 60.0; //Em segundos
     Sol s1 = ILS_Reset(s0, grafo, gen, tempo_maximo);
 
     double percentual_melhora = (static_cast<double>(s1.score - s0.score) / s0.score) * 100;
-    // std::cout << "Tempo Máximo: " << grafo.t_max * grafo.veiculos << std::endl;
-    // cout << "Seed: "<<seed_value<< " | Tempo de Execução: "<<tempo_maximo<<"s"<<endl;
-    // cout << "T_prot: "<< grafo.t_prot/60 << "min | T_parada: " <<grafo.t_parada/60<< "min | Velocidade: "<<grafo.velocidade<<"Km/h"<< endl;
-    // cout << "Instância: " << instancia << " | Vértices: " <<grafo.qt_vertices << " | Veículos: " <<grafo.veiculos<<endl;
+    std::cout << "Tempo Máximo: " << grafo.t_max * grafo.veiculos << std::endl;
+    cout << "Seed: "<<seed_value<< " | Tempo de Execução: "<<tempo_maximo<<"s"<<endl;
+    cout << "T_prot: "<< grafo.t_prot/60 << "min | T_parada: " <<grafo.t_parada/60<< "min | Velocidade: "<<grafo.velocidade<<"Km/h"<< endl;
+    cout << "Instância: " << instancia << " | Vértices: " <<grafo.qt_vertices << " | Veículos: " <<grafo.veiculos<<endl;
     // cout << "Solução Gulosa - Score: "<<s0.score<<" | Custo: " << s0.custo<<endl;
-    // cout << "Solução Construtivo - Score: " << s0.score << " | Custo: " << s0.custo << endl;
-    // cout << "Solução ILS - Score: " << s1.score << " | Custo: "<<s1.custo<<endl;
-    // cout << "Melhoria de " << percentual_melhora << "%"<<endl<<endl;
-    s1.print_solucao(grafo);
+    cout << "Solução Construtivo - Score: " << s0.score << " | Custo: " << s0.custo << endl;
+    cout << "Solução ILS - Score: " << s1.score << " | Custo: "<<s1.custo<<endl;
+    cout << "Melhoria de " << percentual_melhora << "%"<<endl<<endl;
+
+    cout << "Contagem Estruturas de Vizinhança: " <<endl;
+    cout << "Best Incert = " << s1.cont_vizinhanca["best_incert"]<<endl;
+    cout << "Swap Inter = " << s1.cont_vizinhanca["swap_inter"]<<endl;
+    cout << "Swap Intra = " << s1.cont_vizinhanca["swap_intra"] << endl;
+    cout << "Swap Out = " << s1.cont_vizinhanca["swap_out"] << endl;
+    cout << "Para = " << s1.cont_vizinhanca["para"] << endl;
+    // s1.print_solucao(grafo);
     // exportar um .TXT
 }

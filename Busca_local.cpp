@@ -24,7 +24,7 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
     vector<Operacao> operacoes = {Operacao::Insert, Operacao::SwapInter, Operacao::SwapIntra, Operacao::SwapOut, Operacao::Para};
 
     while (!S.rotas.empty()) {
-        Caminho rota = S.rotas.top();
+        Caminho rota = S.rotas.top(); //colocar para vector
         S.rotas.pop();
 
         realizou_melhora = false;
@@ -43,6 +43,7 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
 
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
+                    S.cont_vizinhanca["best_incert"]+=1;
                     break;
                 }
             }
@@ -56,6 +57,7 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                     chamou = "Busca Local - Swap Inter";
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
+                    S.cont_vizinhanca["swap_inter"] += 1;
                     break;
                 }
             }
@@ -67,6 +69,7 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                     chamou = "Busca Local - Para";
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
+                    S.cont_vizinhanca["para"] += 1;
                     break;
                 }
             }
@@ -80,10 +83,15 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                     chamou = "Busca Local - Swap Out";
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
+                    S.cont_vizinhanca["swap_out"] += 1;
                     break;
                 }
             }
             else if(operacao == Operacao::SwapIntra){
+                //fazer o classico 
+                // sempre tentar trocar com todas as rotas
+                //fazer um cache "caso nao seja "
+                // Fazer o best_improvement classico 
                 if (S.rotas.size() > 0)
                 {
                     Caminho rota2 = S.rotas.top();
@@ -98,6 +106,7 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                         chamou = "Busca Local - Swap Intra";
                         assert(S.checa_solucao(grafo, chamou));
                         realizou_melhora = true;
+                        S.cont_vizinhanca["swap_intra"] += 1;
                         break;
                     }
 
