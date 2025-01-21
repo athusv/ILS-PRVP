@@ -5,18 +5,11 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
     std::string chamou;
     bool best_improvement = false;
 
-    std::priority_queue<Caminho> aux_rotas;
-
-    while (!S.rotas.empty())
-    {
-        Caminho rota = S.rotas.top();
-        S.rotas.pop();
+    for (auto &rota : S.rotas){
         int quantos_excluir = static_cast<int>(rota.route.size() * porcentagem_perturbacao);
-        // cout<< "Porcentagem Perturbaçao: "<< porcentagem_perturbacao<< endl;
+        // std::cout << "Porcentagem Perturbação: " << porcentagem_perturbacao << std::endl;
         // std::cout << "Quantos excluir = " << quantos_excluir << std::endl;
-        // std::cout << std::endl
-        //           << rota << std::endl
-        //           << std::endl;
+        // std::cout << "Rota ID: " << rota.id << std::endl;
 
         std::vector<int> indice_route;
         for (int i = 1; i < rota.route.size() - 1; i++)
@@ -64,13 +57,14 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
                 n = 0;
                 continue;
             }
-
-            if (Busca_local::swap_Out_rotas(grafo, S, rota, i, i + 1, best_improvement))
+            vector<vector<double>> swap_out = Busca_local::swap_Out_rotas(grafo, S, rota, i, i + 1, best_improvement);
+            if (swap_out[0][0] != -1)
             {
                 // cout <<endl<< "Efetuando Swap perturbaçao" << endl;
                 // cout<<rota<<endl;
                 // cout << "Rota: " << rota.id << " - Vertice[" << swap_out[0][3] << "] = " << swap_out[0][0] << " (SAI) " << " |Swap| Vertice[" << swap_out[0][3]<< "] = " << swap_out[1][0] << " (ENTRA)" << std::endl;
-
+                rota.excluir(swap_out[0], S.visited_vertices, S.score, S.custo);
+                rota.incert(swap_out[1], S.visited_vertices, S.score, S.custo);
                 S.atualiza_push(grafo);
 
                 chamou = "Perturbação - Swap Out";
@@ -125,9 +119,7 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
             n++;
         }
 
-        aux_rotas.push(rota);
     }
-    S.rotas = aux_rotas;
 
     return S;
 }
@@ -140,12 +132,7 @@ Sol &Perturbacao::perturbacao(Instance &grafo, Sol &S, std::mt19937 &gen)
     double porcentagem_perturbacao = static_cast<double>(numero_aleatorio) * 0.1;
     bool best_improvement = false;
 
-    std::priority_queue<Caminho> aux_rotas;
-
-    while (!S.rotas.empty())
-    {
-        Caminho rota = S.rotas.top();
-        S.rotas.pop();
+    for (auto &rota : S.rotas){
         int quantos_excluir = static_cast<int>(rota.route.size() * porcentagem_perturbacao);
 
         // std::cout << "Quantos excluir = " << quantos_excluir << std::endl;
@@ -262,10 +249,7 @@ Sol &Perturbacao::perturbacao(Instance &grafo, Sol &S, std::mt19937 &gen)
 
             n++;
         }
-
-        aux_rotas.push(rota);
     }
-    S.rotas = aux_rotas;
 
     return S;
 }

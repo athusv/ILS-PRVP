@@ -14,7 +14,7 @@ Sol::Sol(const Instance &grafo) {
         aux_rota.paradas.push_back(0);
         aux_rota.visita_custo.push_back(0);
         aux_rota.push_hotspots.push_back({999, 999});
-        rotas.push(aux_rota);
+        rotas.push_back(aux_rota);
     }
 }
 
@@ -31,10 +31,7 @@ void Sol::print_visited(int inicio, int final) const{
 
 bool Sol::checa_rota(Instance &grafo, string &chamou) {
     bool achou = true;
-    priority_queue<Caminho> rotasCopy = rotas;
-    while (!rotasCopy.empty()) {
-        Caminho rota = rotasCopy.top();
-        rotasCopy.pop();
+    for (auto &rota : rotas){
         for (int i = 1; i < rota.route.size() - 1; i++) {
             auto it = visited_vertices[rota.route[i]].find(rota.visita_custo[i] + grafo.t_prot);
             if (it == visited_vertices[rota.route[i]].end()) {
@@ -84,10 +81,7 @@ bool Sol::checa_visited(const Instance &grafo, string &chamou) const {
 }
 
 bool Sol::checa_score(Instance &grafo, string &chamou) {
-    priority_queue<Caminho> rotasCopy = rotas;
-    while (!rotasCopy.empty()) {
-        Caminho rota = rotasCopy.top();
-        rotasCopy.pop();
+    for (auto &rota : rotas){
         double aux_score = 0;
         for (int i = 0; i < rota.route.size(); i++) {
             double s;
@@ -110,10 +104,7 @@ bool Sol::checa_score(Instance &grafo, string &chamou) {
 
 bool Sol::checa_custo(Instance &grafo, string &chamou) {
     double total_custo = 0;
-    priority_queue<Caminho> rotasCopy = rotas;
-    while (!rotasCopy.empty()) {
-        Caminho rota = rotasCopy.top();
-        rotasCopy.pop();
+    for (auto &rota : rotas){
         double aux_custo = 0;
         for (int i = 1; i < rota.route.size(); i++) {
             aux_custo += grafo.distancia_matriz[rota.route[i - 1]][rota.route[i]];
@@ -137,11 +128,7 @@ bool Sol::checa_custo(Instance &grafo, string &chamou) {
     return true;
 }
 bool Sol::checa_push(Instance &grafo, string &chamou){
-    priority_queue<Caminho> rotasCopy = rotas;
-    while (!rotasCopy.empty())
-    {
-        Caminho rota = rotasCopy.top();
-        rotasCopy.pop();
+    for (auto &rota : rotas){
         for (int i = rota.push_hotspots.size() - 2; i >= 0; i--)
         {
             if (i == 0)
@@ -188,11 +175,7 @@ bool Sol::checa_push(Instance &grafo, string &chamou){
 }
 
 bool Sol::checa_visita_custo(Instance &grafo, string &chamou){
-    priority_queue<Caminho> rotasCopy = rotas;
-    while (!rotasCopy.empty())
-    {
-        Caminho rota = rotasCopy.top();
-        rotasCopy.pop();
+    for (auto &rota : rotas){
         double aux_visita_custo = 0;
         for(int i = 1 ; i < rota.route.size()-1; i++){
             int plus_parada = (rota.paradas[i]) ? grafo.t_parada : 0;
@@ -222,24 +205,15 @@ bool Sol::checa_solucao(Instance &grafo, string &chamou) {
 }
 
 void Sol::atualiza_push(Instance &grafo) {
-    priority_queue<Caminho> rotasCopy;
-    while (!rotas.empty()) {
-        Caminho rota = rotas.top();
-        rotas.pop();
+    for (auto &rota : rotas){
         rota.atualizar_push_hotspots(visited_vertices);
-        rotasCopy.push(rota);
     }
-    rotas = rotasCopy;
 }
 void Sol::print_solucao(Instance &grafo)
 {
-    priority_queue<Caminho> rotasCopy = rotas;
     cout << score << endl;
     cout << grafo.veiculos << endl;
-    while (!rotasCopy.empty())
-    {
-        Caminho r = rotasCopy.top();
-        rotasCopy.pop();
+    for (auto &r : rotas){
         cout << endl
              << "Viatura " << r.id << ":" << endl;
             //  << "Vertice, Tempo visita, Para_Passa" << endl;
@@ -265,11 +239,9 @@ bool Sol::operator<(const Sol &s) const {
 }
 
 ostream &operator<<(ostream &os, const Sol &sol) {
-    priority_queue<Caminho> rotasCopy = sol.rotas;
     os << "Score: " << sol.score << ", Custo: " << sol.custo << endl;
-    while (!rotasCopy.empty()) {
-        os << rotasCopy.top() << endl;
-        rotasCopy.pop();
+    for (auto &rota : sol.rotas){
+        os << rota << endl;
     }
     return os;
 }

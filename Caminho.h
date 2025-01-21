@@ -22,6 +22,8 @@ public:
     vector<bool> paradas; // Se Para ou Passa
     vector<double> visita_custo; // Custo de quando o vertice foi visitado
     vector<pair<double, double> > push_hotspots; // Para tras e para frente.
+    // [4] ultima atualizaçao
+    // [1] ultima checagem
 
     Caminho(int id, int t_prot, int t_parada);
     void incert(vector<double> &best_insert, vector<map<double, int> > &visited_vertices, double &score_s,

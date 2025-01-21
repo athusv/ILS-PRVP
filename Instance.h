@@ -19,6 +19,16 @@ public:
     vector<double> score_vertices;
     vector<vector<double> > distancia_matriz;
 
+    enum class Operacao
+    {
+        Insert,
+        SwapInter,
+        SwapIntra,
+        SwapOut,
+        Para,
+        Vazio
+    };
+
     Instance(const string &filename);
     friend ostream &operator<<(ostream &os, const Instance &instance);
 };
