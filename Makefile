@@ -19,7 +19,10 @@ OBJS = $(SRCS:.cpp=.o)
 NUM_RUNS = 1
 
 # Lista de instâncias (arquivos de entrada)
-INSTANCES = 74_2_360_360_5.txt 94_2_360_360_5.txt 
+# INSTANCES = 21_1_360_180_20.txt 10_1_360_120_20.txt 16_1_360_120_20.txt 21_1_360_120_20.txt 10_1_360_90_20.txt 16_1_360_90_20.txt 21_1_360_90_20.txt 
+
+INSTANCES = 107_2_360_120_20.txt 107_5_360_120_20.txt 107_7_360_120_20.txt 47_2_360_120_20.txt 47_5_360_120_20.txt 47_7_360_120_20.txt
+# INSTANCES = 47_2_360_120_20.txt 47_7_360_120_20.txt
 
 # Lista de valores do segundo parâmetro
 PARAMS = 120
@@ -135,14 +138,17 @@ clean:
 
 
 # Executa o programa com os argumentos fornecidos
-run: $(TARGET)
-            #   instancia     T_prot(min) / T_parada(min) / Velocidade(Km/h) 
-	# ./$(TARGET) 10_1_360_360_20.txt
-	# ./$(TARGET) 16_1_360_360_20.txt
-	# ./$(TARGET) 21_1_360_360_20.txt
-	./$(TARGET) 47_2_360_120_20.txt
+# run: $(TARGET)
+#             #   instancia     T_prot(min) / T_parada(min) / Velocidade(Km/h) 
+# 	# ./$(TARGET) 10_1_360_180_20.txt
+# 	./$(TARGET) 16_1_360_180_20.txt
+# 	# ./$(TARGET) 21_1_360_180_20.txt
+# 	# ./$(TARGET) 107_2_360_120_20.txt
 
 
-
-	
+run:
+	@for instance in $(INSTANCES); do \
+		output=$$(./$(TARGET) $$instance); \
+		echo "$$output"; \
+	done
 

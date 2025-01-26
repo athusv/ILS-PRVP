@@ -135,167 +135,167 @@ Sol &Busca_local::best_improvement(Instance &grafo, Sol &S){
     vector<double> best_v_insert, best_para;
     ////////////////// DEPOIS DE TESTAR TODAS AS OPERAÇÕES DE MELHORAR SCORES, TESTAR AS DE MELHORAR CUSTO ////////////////////
     while(realizou_melhora){
-        //                                                Operacao, {score, custo, rota1, rota2}
         // cout << "Iteração: " << count << endl;
-        pair<Instance::Operacao, vector<double>> best_operacao = {Instance::Operacao::Vazio, {-1, 1, -1, -1}};
-        vector<vector<double>> operacao(4, vector<double>(6, -1));
         realizou_melhora = false;
+
+        vector<double> best_operacao(6, -1);
+        int best_rota = -1;
         for (int i = 0; i < S.rotas.size(); i++){
-            Caminho &rota = S.rotas[i]; 
-            // cout << "Rota: " << i << endl;
-            // [insert 1, 2] analisar a ultima vez
+            Caminho &rota = S.rotas[i];
             best_v_insert = best_insert(grafo, S, rota, best_improvement);
-            // cout << "after best_insert" << endl;
-            if (best_v_insert[0]!= -1 && best_operacao.second[0] < best_v_insert[1])
-            {
-                best_operacao.first = Instance::Operacao::Insert;
-                
-                best_operacao.second[0] = best_v_insert[1];
-                // cout << "best_operacao.second[0]: " << best_operacao.second[0] << endl;
-                best_operacao.second[2] = i;
-
-                operacao[0] = best_v_insert;
-                // cout << "Rota: " << i << endl;
-                // cout << "operacao: insert" << endl;
+            if(best_v_insert[0]!=-1 && best_operacao[1] < best_v_insert[1]){
+                best_rota = i;
+                best_operacao = best_v_insert;
             }
-            // cout<< "Best Insert: " << best_v_insert[0] << " | " << best_v_insert[1] << " | " << best_v_insert[2] << " | " << best_v_insert[3] << " | " << best_v_insert[4] << " | " << best_v_insert[5] << endl;
-            swap_out = swap_Out_rotas(grafo, S, rota, 1, rota.route.size() - 1, best_improvement);
-            if (swap_out[0][0]!=-1 && best_operacao.second[0] < swap_out[1][1] - swap_out[0][1])
-            {
-                best_operacao.first = Instance::Operacao::SwapOut;
-                best_operacao.second[0] = swap_out[1][1] - swap_out[0][1];
-                best_operacao.second[2] = i;
-
-                operacao[0] = swap_out[0];
-                operacao[1] = swap_out[1];
-                // cout << "Rota: " << rota.id << " - Vertice[" << swap_out[0][3] << "] = " << swap_out[0][0] << " (SAI) " << " |Swap| Vertice[" << swap_out[0][3] << "] = " << swap_out[1][0] << " (ENTRA) " << endl;
-            }
-            best_para = para(grafo, S, rota, best_improvement);
-            if (best_para[0]!= -1 && best_operacao.second[0] < best_para[2] - best_para[1])
-            {
-                best_operacao.first = Instance::Operacao::Para;
-                best_operacao.second[0] = best_para[2] - best_para[1];
-                best_operacao.second[2] = i;
-
-                operacao[0] = best_para;
-            }
-
-            if(best_operacao.first == Instance::Operacao::Vazio){
-                // operaçoes que melhoram custo
-                // for (int j = 0; j < S.rotas.size(); j++)
-                // {
-                //     if (i == j)
-                //         continue;
-                    
-                //     swap_intra = swap_intra_rotas(grafo, S, rota, S.rotas[j], 1, rota.route.size(), best_improvement);
-                //     if (swap_intra[0][0]!= -1 && best_operacao.second[1] > swap_intra[2][1] + swap_intra[3][1] - swap_intra[0][1] - swap_intra[1][1])
-                //     {
-                //         best_operacao.first = Instance::Operacao::SwapIntra;
-                //         best_operacao.second[1] = swap_intra[2][1] + swap_intra[3][1] - swap_intra[0][1] - swap_intra[1][1];
-                //         best_operacao.second[2] = i;
-                //         best_operacao.second[3] = j;
-
-                //         operacao[0] = swap_intra[0];
-                //         operacao[1] = swap_intra[1];
-                //         operacao[2] = swap_intra[2];
-                //         operacao[3] = swap_intra[3];
-                //     }
-                // }
-                
-                swap_inter = swap_inter_rotas(grafo, S, rota, best_improvement);
-                if (swap_inter[0][0] != -1 && best_operacao.second[1] > swap_inter[2][1] + swap_inter[3][1] - swap_inter[0][1] - swap_inter[1][1])
-                {
-                    best_operacao.first = Instance::Operacao::SwapInter;
-                    best_operacao.second[1] = swap_inter[2][1] + swap_inter[3][1] - swap_inter[0][1] - swap_inter[1][1];
-                    best_operacao.second[2] = i;
-
-                    operacao[0] = swap_inter[0];
-                    operacao[1] = swap_inter[1];
-                    operacao[2] = swap_inter[2];
-                    operacao[3] = swap_inter[3];
-                }
-                
-            }
+            
         }
 
-
-        if (best_operacao.first == Instance::Operacao::Insert)
+        if (best_rota != -1)
         {
-            // insert
-            Caminho &rota = S.rotas[best_operacao.second[2]];
-            rota.incert(operacao[0], S.visited_vertices, S.score, S.custo);
-            // S.rotas.push(rota);
+            Caminho &rota = S.rotas[best_rota];
+            rota.incert(best_operacao, S.visited_vertices, S.score, S.custo);
             S.atualiza_push(grafo);
-
-            chamou = "Busca Local - insert";
-
+            chamou = "Busca Local - best_incert";
             assert(S.checa_solucao(grafo, chamou));
             realizou_melhora = true;
             S.cont_vizinhanca["best_incert"] += 1;
+            continue;
         }
-        else if (best_operacao.first == Instance::Operacao::SwapInter)
-        {
-            Caminho &rota = S.rotas[best_operacao.second[2]];
-            // cout << "Rota: " << rota.id << " - Vertice[" << operacao[0][3] << "] = " << rota.route[operacao[0][3]] << " |Swap| Vertice[" << operacao[1][3] << "] = " << rota.route[operacao[1][3]] << endl;
-            rota.excluir(operacao[0], S.visited_vertices, S.score, S.custo);
-            rota.incert(operacao[2], S.visited_vertices, S.score, S.custo);
 
-            rota.excluir(operacao[1], S.visited_vertices, S.score, S.custo);
-            rota.incert(operacao[3], S.visited_vertices, S.score, S.custo);
-            // S.rotas.push(rota);
-            S.atualiza_push(grafo);
+        vector<vector<double>> best_operacao2(2, vector<double>(6, -1));
+        double best_score = -1;
+        best_rota = -1;
+        for (int i = 0; i < S.rotas.size(); i++){
+            Caminho &rota = S.rotas[i];
+            swap_out = swap_Out_rotas(grafo, S, rota, 1, rota.route.size() - 1, best_improvement);
+            if(swap_out[0][0]!=-1 && best_score < swap_out[1][1] - swap_out[0][1]){
+                best_rota = i;
+                best_score = swap_out[1][1] - swap_out[0][1];
+                best_operacao2[0] = swap_out[0];
+                best_operacao2[1] = swap_out[1];
+            }
 
-            chamou = "Busca Local - Swap Inter";
-            assert(S.checa_solucao(grafo, chamou));
-            realizou_melhora = true;
-            S.cont_vizinhanca["swap_inter"] += 1;
+            if(i == S.rotas.size()-1){
+                if(best_rota != -1){
+                    Caminho &rota = S.rotas[best_rota];
+                    rota.excluir(best_operacao2[0], S.visited_vertices, S.score, S.custo);
+                    rota.incert(best_operacao2[1], S.visited_vertices, S.score, S.custo);
+                    S.atualiza_push(grafo);
+                    chamou = "Busca Local - swap_out";
+                    assert(S.checa_solucao(grafo, chamou));
+                    realizou_melhora = true;
+                    S.cont_vizinhanca["swap_out"] += 1;
+                }
+            }
         }
-        else if (best_operacao.first == Instance::Operacao::Para)
-        {
-            Caminho &rota = S.rotas[best_operacao.second[2]];
-            // std::cout << "Rota " << rota.id << " - Vertice[" << operacao[0][0] << "] = " << rota.route[operacao[0][0]] << " Score passada: " << operacao[0][1] << " | Score parada: " << operacao[0][2] << std::endl;   
-            rota.parar(operacao[0], S.visited_vertices, S.score, S.custo);
-            // S.rotas.push(rota);
-            S.atualiza_push(grafo);
-            chamou = "Busca Local - Para";
-            assert(S.checa_solucao(grafo, chamou));
-            realizou_melhora = true;
-            S.cont_vizinhanca["para"] += 1;
-        }
-        else if (best_operacao.first == Instance::Operacao::SwapOut)
-        {
-            // Swap vértice fora da rota
-            // S.rotas.push(rota);
-            Caminho &rota = S.rotas[best_operacao.second[2]];
-            // cout << "Rota: " << rota.id << " - Vertice[" << operacao[0][3] << "] = " << operacao[0][0] << " (SAI) " << " |Swap| Vertice[" << operacao[0][3] << "] = " << operacao[1][0] << " (ENTRA) " << endl;
-            rota.excluir(operacao[0], S.visited_vertices, S.score, S.custo);
-            rota.incert(operacao[1], S.visited_vertices, S.score, S.custo);
-            S.atualiza_push(grafo);
-            chamou = "Busca Local - Swap Out";
-            assert(S.checa_solucao(grafo, chamou));
-            realizou_melhora = true;
-            S.cont_vizinhanca["swap_out"] += 1;
 
-        }
-        else if (best_operacao.first == Instance::Operacao::SwapIntra)
-        {
-            Caminho &rota = S.rotas[best_operacao.second[2]];
-            rota.excluir(operacao[0], S.visited_vertices, S.score, S.custo);
-            rota.incert(operacao[2], S.visited_vertices, S.score, S.custo);
+        if(realizou_melhora) continue;
 
-            Caminho &rota2 = S.rotas[best_operacao.second[3]];
-            rota2.excluir(operacao[1], S.visited_vertices, S.score, S.custo);
-            rota2.incert(operacao[3], S.visited_vertices, S.score, S.custo);
-            cout << "Rota: " << rota.id << " - Visita[" << operacao[0][3] << "] = " << rota.visita_custo[operacao[0][3]] << " |Swap| Rota: " << rota2.id << " - Visita[" << operacao[1][3] << "] = " << rota2.visita_custo[operacao[1][3]] << endl;
-            S.atualiza_push(grafo);
-            chamou = "Busca Local - Swap Intra";
-            assert(S.checa_solucao(grafo, chamou));
-            realizou_melhora = true;
-            S.cont_vizinhanca["swap_intra"] += 1;
-        }else{
-            // cout << "Nenhuma melhora encontrada" << endl;
+        best_operacao = {-1, -1, -1, -1, -1, -1};
+        best_score = -1;
+        best_rota = -1;
+        for (int i = 0; i < S.rotas.size(); i++){
+            Caminho &rota = S.rotas[i];
+            best_para = para(grafo, S, rota, best_improvement);
+            if(best_para[0]!=-1 && best_score < best_para[2] - best_para[1]){
+                best_rota = i;
+                best_score = best_para[2] - best_para[1];
+                best_operacao = best_para;
+            }
+
+            if(i == S.rotas.size()-1){
+                if(best_rota != -1){
+                    Caminho &rota = S.rotas[best_rota];
+                    rota.parar(best_operacao, S.visited_vertices, S.score, S.custo);
+                    S.atualiza_push(grafo);
+                    chamou = "Busca Local - para";
+                    assert(S.checa_solucao(grafo, chamou));
+                    realizou_melhora = true;
+                    S.cont_vizinhanca["para"] += 1;
+                }
+            }
         }
-        count += 1;
+
+        if(realizou_melhora) continue;
+
+        vector<vector<double>>best_operacao3(4, vector<double>(6, -1));
+        double best_custo = 1;
+        best_rota = -1;
+        for (int i = 0; i < S.rotas.size(); i++){
+            Caminho &rota = S.rotas[i];
+            swap_inter = swap_inter_rotas(grafo, S, rota, best_improvement);
+            if (swap_inter[0][0] != -1 && best_custo > swap_inter[2][1] + swap_inter[3][1] - swap_inter[0][1] - swap_inter[1][1]){
+                best_rota = i;
+                best_custo = swap_inter[2][1] + swap_inter[3][1] - swap_inter[0][1] - swap_inter[1][1];
+                best_operacao3[0] = swap_inter[0];
+                best_operacao3[1] = swap_inter[1];
+                best_operacao3[2] = swap_inter[2];
+                best_operacao3[3] = swap_inter[3];
+            }
+
+            if(i == S.rotas.size()-1){
+                if(best_rota != -1){
+                    Caminho &rota = S.rotas[best_rota];
+                    rota.excluir(best_operacao3[0], S.visited_vertices, S.score, S.custo);
+                    rota.incert(best_operacao3[2], S.visited_vertices, S.score, S.custo);
+
+                    rota.excluir(best_operacao3[1], S.visited_vertices, S.score, S.custo);
+                    rota.incert(best_operacao3[3], S.visited_vertices, S.score, S.custo);
+                    S.atualiza_push(grafo);
+                    chamou = "Busca Local - swap_inter";
+                    assert(S.checa_solucao(grafo, chamou));
+                    realizou_melhora = true;
+                    S.cont_vizinhanca["swap_inter"] += 1;
+                }
+            }
+        }
+
+        if(realizou_melhora) continue;
+
+        best_operacao3 = {{-1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1}};
+        best_custo = 1;
+        best_rota = -1;
+        int best_rota2 = -1;
+        for (int i = 0; i < S.rotas.size(); i++){
+            Caminho &rota = S.rotas[i]; 
+            for (int j = i+1; j < S.rotas.size(); j++)
+            {
+                // if (i == j)
+                //     continue;
+
+                Caminho &rota2 = S.rotas[j];
+                swap_intra = swap_intra_rotas(grafo, S, rota, rota2, 1, rota.route.size()-1, best_improvement);
+                if (swap_intra[0][0]!= -1 && best_custo > swap_intra[2][1] + swap_intra[3][1] - swap_intra[0][1] - swap_intra[1][1])
+                {
+                    best_rota = i;
+                    best_rota2 = j;
+                    best_custo = swap_intra[2][1] + swap_intra[3][1] - swap_intra[0][1] - swap_intra[1][1];
+
+                    best_operacao3[0] = swap_intra[0];
+                    best_operacao3[1] = swap_intra[1];
+                    best_operacao3[2] = swap_intra[2];
+                    best_operacao3[3] = swap_intra[3];
+                }
+            }
+
+            if(i == S.rotas.size()-1){
+                if(best_rota != -1){
+                    Caminho &rota = S.rotas[best_rota];
+                    Caminho &rota2 = S.rotas[best_rota2];
+                    
+                    rota.excluir(best_operacao3[0], S.visited_vertices, S.score, S.custo);
+                    rota2.excluir(best_operacao3[1], S.visited_vertices, S.score, S.custo);
+
+                    rota.incert(best_operacao3[2], S.visited_vertices, S.score, S.custo);
+                    rota2.incert(best_operacao3[3], S.visited_vertices, S.score, S.custo);
+                    S.atualiza_push(grafo);
+                    chamou = "Busca Local - swap_intra";
+                    assert(S.checa_solucao(grafo, chamou));
+                    realizou_melhora = true;
+                    S.cont_vizinhanca["swap_intra"] += 1;
+                }
+            }
+        }
     }
     return S;
 }
