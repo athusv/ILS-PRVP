@@ -29,7 +29,7 @@ void Sol::print_visited(int inicio, int final) const{
     }
 }
 
-bool Sol::checa_rota(Instance &grafo, string &chamou) {
+bool Sol::checa_rota(const Instance &grafo, string &chamou) {
     bool achou = true;
     for (auto &rota : rotas){
         for (int i = 1; i < rota.route.size() - 1; i++) {
@@ -80,7 +80,7 @@ bool Sol::checa_visited(const Instance &grafo, string &chamou) const {
     return check;
 }
 
-bool Sol::checa_score(Instance &grafo, string &chamou) {
+bool Sol::checa_score(const Instance &grafo, string &chamou) {
     for (auto &rota : rotas){
         double aux_score = 0;
         for (int i = 0; i < rota.route.size(); i++) {
@@ -102,7 +102,7 @@ bool Sol::checa_score(Instance &grafo, string &chamou) {
     return true;
 }
 
-bool Sol::checa_custo(Instance &grafo, string &chamou) {
+bool Sol::checa_custo(const Instance &grafo, string &chamou) {
     double total_custo = 0;
     for (auto &rota : rotas){
         double aux_custo = 0;
@@ -127,7 +127,7 @@ bool Sol::checa_custo(Instance &grafo, string &chamou) {
     }
     return true;
 }
-bool Sol::checa_push(Instance &grafo, string &chamou){
+bool Sol::checa_push(const Instance &grafo, string &chamou){
     for (auto &rota : rotas){
         for (int i = rota.push_hotspots.size() - 2; i >= 0; i--)
         {
@@ -174,7 +174,7 @@ bool Sol::checa_push(Instance &grafo, string &chamou){
     return true;
 }
 
-bool Sol::checa_visita_custo(Instance &grafo, string &chamou){
+bool Sol::checa_visita_custo(const Instance &grafo, string &chamou){
     for (auto &rota : rotas){
         double aux_visita_custo = 0;
         for(int i = 1 ; i < rota.route.size()-1; i++){
@@ -191,7 +191,7 @@ bool Sol::checa_visita_custo(Instance &grafo, string &chamou){
     return true;
 }
 
-bool Sol::checa_solucao(Instance &grafo, string &chamou) {
+bool Sol::checa_solucao(const Instance &grafo, string &chamou) {
     // cout << endl << "********** Validando soluçao: **********" << endl;
     assert(checa_visita_custo(grafo, chamou));
     assert(checa_score(grafo, chamou));
@@ -204,12 +204,12 @@ bool Sol::checa_solucao(Instance &grafo, string &chamou) {
     return true;
 }
 
-void Sol::atualiza_push(Instance &grafo) {
+void Sol::atualiza_push(const Instance &grafo) {
     for (auto &rota : rotas){
         rota.atualizar_push_hotspots(visited_vertices);
     }
 }
-void Sol::print_solucao(Instance &grafo)
+void Sol::print_solucao(const Instance &grafo)
 {
     cout << score << endl;
     cout << grafo.veiculos << endl;

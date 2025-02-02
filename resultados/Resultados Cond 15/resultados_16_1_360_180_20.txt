@@ -1,0 +1,52 @@
+Resultados da instância 16_1_360_180_20.txt
+Tempo Máximo: 21600
+Seed: 3318537193 | Tempo de Execução: 180s
+T_prot: 180min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/16_1_360_180_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 183 | Custo: 9269.35
+Solução ILS - Score: 454.333 | Custo: 21576.8
+Melhoria de 148.27%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 35
+Swap Inter = 18
+Swap Intra = 0
+Swap Out = 13
+Para = 11
+Execução 1 completa.
+Tempo Máximo: 21600
+Seed: 2757584650 | Tempo de Execução: 180s
+T_prot: 180min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/16_1_360_180_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 209 | Custo: 10370.2
+Solução ILS - Score: 454.333 | Custo: 21504
+Melhoria de 117.384%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 22
+Swap Inter = 9
+Swap Intra = 0
+Swap Out = 1
+Para = 17
+Execução 2 completa.
+Tempo Máximo: 21600
+Seed: 994693662 | Tempo de Execução: 180s
+T_prot: 180min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/16_1_360_180_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 212.333 | Custo: 10766
+Solução ILS - Score: 454.333 | Custo: 21531.1
+Melhoria de 113.972%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 63
+Swap Inter = 15
+Swap Intra = 0
+Swap Out = 16
+Para = 16
+Execução 3 completa.
+**** Instância: 16_1_360_180_20.txt -- Seed da melhor execução: 3318537193
+**** Instância: 16_1_360_180_20.txt -- Média de iterações: 
+**** Instância: 16_1_360_180_20.txt -- Pontuação do Construtivo da melhor execução: 183
+**** Instância: 16_1_360_180_20.txt -- Média de pontuação ILS: 454.333
+**** Instância: 16_1_360_180_20.txt -- Melhor pontuação: 454.333
+**** Instância: 16_1_360_180_20.txt -- Melhoria na melhor execução: 148.27%

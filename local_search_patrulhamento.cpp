@@ -250,21 +250,21 @@ Sol ILS(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo)
         s1.atualiza_push(grafo);
         chamou = "Pertubação";
         s1.checa_solucao(grafo, chamou);
-        cout << "|||||||||||Pertubação " << i << endl;
-        cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
+        // cout << "|||||||||||Pertubação " << i << endl;
+        // cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
 
-        s1 = Busca_local::best_improvement(grafo, s1);
+        s1 = Busca_local::best_improvement(grafo, s1, gen);
         s1.atualiza_push(grafo);
 
         chamou = "Busca Local";
         s1.checa_solucao(grafo, chamou);
-        cout << "||||||||||||Busca Local " << i << endl;
-        cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
+        // cout << "||||||||||||Busca Local " << i << endl;
+        // cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
         if (!Utils::doubleGreaterOrEqual(best_s.score, s1.score))
         {
 
-            cout << "Melhor solucão encontrada ***** " << i << endl;
-            cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
+            // cout << "Melhor solucão encontrada ***** " << i << endl;
+            // cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
             best_s = s1;
             s = best_s;
         }
@@ -296,7 +296,7 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo)
     auto inicio = std::chrono::high_resolution_clock::now();
     int it_total = 1;
     int it_sem_melhora = 0;
-    const int max_it_sem_melhora = 600;
+    const int max_it_sem_melhora = 200;
 
     while (true)
     {
@@ -311,7 +311,7 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo)
         // cout << "|||||||||||Pertubação " << it_total << endl;
         // cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
 
-        s1 = Busca_local::best_improvement(grafo, s1);
+        s1 = Busca_local::best_improvement(grafo, s1, gen);
         s1.atualiza_push(grafo);
         chamou = "Busca Local";
         s1.checa_solucao(grafo, chamou);
@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
     cout << "Melhoria de " << percentual_melhora << "%"<<endl<<endl;
 
     cout << "Contagem Estruturas de Vizinhança: " <<endl;
-    cout << "Best Incert = " << s1.cont_vizinhanca["best_incert"]<<endl;
+    cout << "Best Insert = " << s1.cont_vizinhanca["best_insert"]<<endl;
     cout << "Swap Inter = " << s1.cont_vizinhanca["swap_inter"]<<endl;
     cout << "Swap Intra = " << s1.cont_vizinhanca["swap_intra"] << endl;
     cout << "Swap Out = " << s1.cont_vizinhanca["swap_out"] << endl;

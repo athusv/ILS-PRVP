@@ -299,3 +299,162 @@ std::vector<double> Utils::p_insert(Instance& grafo, std::vector<std::map<double
     return vert_incert;
 }
 
+vector<vector<double>> Utils::swap_out(Instance &grafo, Sol &S, Caminho &rota, int i_inicial, int i_final, bool &best)
+{
+    vector<vector<double>> swap_out(2, vector<double>(6, -1));
+    double best_swap = -1;
+    double score_v1;
+    double score_v2;
+
+    double dist1_remove_v1;
+    double dist2_remove_v1;
+
+    double dist1_add_v2;
+    double dist2_add_v2;
+
+    int vertice_parada_v1;
+    int anterior1;
+    int proximo1;
+
+    double impacto1;
+
+    // Itera sobre os vértices na rota
+    for (int i = i_inicial; i < i_final; i++)
+    {
+        // cout << "Best swap: " << best_swap << endl;
+        int v1 = rota.route[i];
+        anterior1 = rota.route[i - 1];
+        proximo1 = rota.route[i + 1];
+        score_v1 = (rota.paradas[i]) ? grafo.score_vertices[v1] : grafo.score_vertices[v1] / 3;
+
+        dist1_remove_v1 = grafo.distancia_matriz[anterior1][v1]; // Arestas que serão removidas V1
+        dist2_remove_v1 = grafo.distancia_matriz[v1][proximo1];
+        vertice_parada_v1 = (rota.paradas[i]) ? grafo.t_parada : 0; // Se tiver parada, plus de 15 minutos
+
+        for (int n = 0; n < 2; n++)
+        {
+            rota.plus_parada = (n == 1) ? 0 : grafo.t_parada;
+            // Itera sobre todos os vértices
+            for (int v2 = 1; v2 < grafo.qt_vertices; v2++)
+            {
+                if (anterior1 == v2 || proximo1 == v2 || v1 == v2)
+                    continue;
+
+                score_v2 = (rota.plus_parada == grafo.t_parada) ? grafo.score_vertices[v2] : grafo.score_vertices[v2] / 3;
+
+                if (best_swap >= -score_v1 + score_v2 || rota.score - score_v1 + score_v2 <= rota.score)
+                    continue; // ja tem a melhor swap
+
+                dist1_add_v2 = grafo.distancia_matriz[anterior1][v2]; // Arestas que serão adicionadas
+                dist2_add_v2 = grafo.distancia_matriz[v2][proximo1];
+
+                impacto1 = -dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1 + dist1_add_v2 + dist2_add_v2 + rota.plus_parada;
+
+                // Verifica se o novo custo ultrapassa o T_max
+                if (!Utils::doubleLessOrEqual(rota.custo + impacto1, grafo.t_max))
+                {
+                    // cout << "EXCEDEU TEMPO LIMITE" << endl;
+                    continue; // Custo ultrapassa o T_max, não tem como fazer o swap
+                }
+
+                double impacto1_if_equals = 0;
+                bool local_visita = false;
+                if (S.visited_vertices[v2].empty())
+                {
+                    local_visita = true;
+                }
+                else
+                {
+                    auto it = S.visited_vertices[v2].lower_bound(
+                        rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada + grafo.t_prot);
+                    if (it == S.visited_vertices[v2].end())
+                    {
+                        auto it_prev = prev(it);
+                        if (Utils::doubleLessOrEqual(it_prev->first, rota.visita_custo[i - 1] + dist1_add_v2))
+                        {
+                            local_visita = true;
+                        }
+                        else
+                        {
+                            local_visita = false;
+                        }
+                    }
+                    else if (it == S.visited_vertices[v2].begin())
+                    {
+                        if (it->second == rota.id)
+                            impacto1_if_equals += impacto1;
+                        if (Utils::doubleLessOrEqual(rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada + grafo.t_prot, it->first - grafo.t_prot + impacto1_if_equals))
+                        {
+                            local_visita = true;
+                        }
+                        else
+                        {
+                            local_visita = false;
+                        }
+                    }
+                    else
+                    {
+                        if (it->second == rota.id)
+                            impacto1_if_equals += impacto1;
+                        auto it_prev = prev(it);
+                        if (Utils::doubleLessOrEqual(rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada + grafo.t_prot, it->first - grafo.t_prot + impacto1_if_equals) &&
+                            Utils::doubleLessOrEqual(it_prev->first, rota.visita_custo[i - 1] + dist1_add_v2))
+                        {
+                            local_visita = true;
+                        }
+                    }
+                }
+
+                if (!local_visita)
+                    continue;
+
+                int if_next_equals = 0;
+                int if_prev_equals = 0;
+                // colocar o nova funçao de possibilidade visita
+                // possibilidade visita rota
+                bool possibilidade_visita = true;
+                if (impacto1 < 0)
+                {
+                    possibilidade_visita = (Utils::doubleGreaterOrEqual(rota.push_hotspots[i + 1].first, impacto1 * -1));
+                }
+                else
+                {
+                    possibilidade_visita = (Utils::doubleGreaterOrEqual(rota.push_hotspots[i + 1].second, impacto1));
+                }
+
+                if (possibilidade_visita)
+                {
+                    // Dados do vértice removido da rota
+                    swap_out[0][0] = v1;                                                                                                  // ID do vértice v1 que será removido
+                    swap_out[0][1] = score_v1;                                                                                            // Score do vértice
+                    swap_out[0][2] = grafo.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1; // Alteração no custo total ao remover o vértice
+                    swap_out[0][3] = i;                                                                                                   // Posição do vértice na rota original
+
+                    // Dados do vértice inserido na rota
+                    swap_out[1][0] = v2;                                                                                           // ID do vértice que será inserido
+                    swap_out[1][1] = score_v2;                                                                                     // Score do vértice
+                    swap_out[1][2] = dist1_add_v2 + dist2_add_v2 + rota.plus_parada - grafo.distancia_matriz[anterior1][proximo1]; // Alteração no custo total ao adicionar o vértice
+                    swap_out[1][3] = i;                                                                                            // Posição onde o vértice será inserido na rota
+                    swap_out[1][4] = rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada;                                   // Novo tempo de visita
+                    swap_out[1][5] = (rota.plus_parada == grafo.t_parada) ? 1 : 0;                                                 // Indica se o vértice é uma parada
+
+                    if (best)
+                    {
+                        best_swap = -score_v1 + score_v2;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    // return swap;
+                }
+            }
+            if (!best && swap_out[0][0] != -1)
+                break;
+        }
+        if (!best && swap_out[0][0] != -1)
+            break;
+    }
+
+    return swap_out;
+}

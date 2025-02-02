@@ -57,7 +57,7 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
                 n = 0;
                 continue;
             }
-            vector<vector<double>> swap_out = Busca_local::swap_Out_rotas(grafo, S, rota, i, i + 1, best_improvement);
+            vector<vector<double>> swap_out = Utils::swap_out(grafo, S, rota, i, i + 1, best_improvement);
             if (swap_out[0][0] != -1)
             {
                 // cout <<endl<< "Efetuando Swap perturbaçao" << endl;
@@ -75,46 +75,6 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
                 n = 0;
                 continue;
             }
-
-            // // swap_intra
-
-            // if(S.rotas.size() != 0){
-            //     Caminho rota2 = S.rotas.top();
-            //     S.rotas.pop();
-
-            //     if (Busca_local::swap_intra_rotas(grafo, S, rota, rota2, i, i + 1, best_improvement))
-            //     {
-
-            //         // S.rotas.push(rota);
-            //         S.rotas.push(rota2);
-            //         S.atualiza_push(grafo);
-            //         chamou = "Perturbação - Swap Intra";
-            //         assert(S.checa_solucao(grafo, chamou));
-
-            //         std::shuffle(indice_route.begin(), indice_route.end(), gen);
-            //         quantos_excluir--;
-            //         n = 0;
-            //         continue;
-            //     }
-            // }else if(aux_rotas.size() != 0){
-            //     Caminho rota2 = aux_rotas.top();
-            //     aux_rotas.pop();
-
-            //     if (Busca_local::swap_intra_rotas(grafo, S, rota, rota2, i, i + 1, best_improvement))
-            //     {
-
-            //         // S.rotas.push(rota);
-            //         aux_rotas.push(rota2);
-            //         S.atualiza_push(grafo);
-            //         chamou = "Perturbação - Swap Intra";
-            //         assert(S.checa_solucao(grafo, chamou));
-
-            //         std::shuffle(indice_route.begin(), indice_route.end(), gen);
-            //         quantos_excluir--;
-            //         n = 0;
-            //         continue;
-            //     }
-            // }
 
             n++;
         }

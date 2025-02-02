@@ -20,6 +20,7 @@ public:
     static std::vector<double> p_excluir(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, Caminho& rota, int i);
     static bool swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i);
     static std::vector<double> p_insert(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, const Caminho& rota, int i, int vertice_insert);
+    static vector<vector<double>> swap_out(Instance &grafo, Sol &S, Caminho &rota, int i_inicial, int i_final, bool &best);
 };
 
 #endif // UTILS_H

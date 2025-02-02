@@ -1,0 +1,31 @@
+Resultados da instância 21_1_360_360_20.txt
+Tempo Máximo: 21600
+Seed: 3445386811 | Tempo de Execução: 180s
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/21_1_360_360_20.txt | Vértices: 21 | Veículos: 1
+Solução Construtivo - Score: 245 | Custo: 14235.8
+Solução ILS - Score: 323 | Custo: 18951.9
+Melhoria de 31.8367%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 0
+Swap Inter = 10
+Swap Intra = 0
+Swap Out = 0
+Para = 12
+Execução 1 completa.
+Tempo Máximo: 21600
+Seed: 1021243547 | Tempo de Execução: 180s
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: Instancias/21_1_360_360_20.txt | Vértices: 21 | Veículos: 1
+Solução Construtivo - Score: 264.333 | Custo: 13960.3
+Solução ILS - Score: 323 | Custo: 18925.4
+Melhoria de 22.1942%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 0
+Swap Inter = 5
+Swap Intra = 0
+Swap Out = 0
+Para = 8
+Execução 2 completa.
