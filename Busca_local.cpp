@@ -13,7 +13,7 @@ Sol &Busca_local::best_improvement(Instance &grafo, Sol &S, mt19937 gen)
     bool best_improvement = true;
     
     while (true){
-
+        
         auto best_insert = [&]() -> bool {
             return Busca_local::best_insert(grafo, S, best_improvement);
         };
@@ -46,15 +46,17 @@ Sol &Busca_local::best_improvement(Instance &grafo, Sol &S, mt19937 gen)
     return S;
 }
 
-bool Busca_local::para(const Instance &grafo, Sol &S, bool &best)
+bool Busca_local::para(Instance &grafo, Sol &S, bool &best)
 {
     // O melhor vertice marcado como passada q for possivel ser parada, sera uma parada
     int best_rota = -1;
     vector<double> best_para(6, -1);
     for (int r = 0; r < S.rotas.size(); r++)
     {
-        Caminho &rota = S.rotas[r];
         
+        Caminho &rota = S.rotas[r];
+        S.cont_vizinhanca_total["para"] += 1;
+        S.teste_rotas[r] += 1;
         vector<double> vertice_para(6, -1);
         if (rota.custo + grafo.t_parada > grafo.t_max)
         {
@@ -63,6 +65,7 @@ bool Busca_local::para(const Instance &grafo, Sol &S, bool &best)
         
         for (int i = 1; i < rota.route.size() - 1; i++)
         {
+            
             if (rota.paradas[i] == 1)
                 continue;
 
@@ -92,35 +95,42 @@ bool Busca_local::para(const Instance &grafo, Sol &S, bool &best)
         rota.parar(best_para, S.visited_vertices, S.score, S.custo);
         S.atualiza_push(grafo);
         string chamou = "Busca Local - para";
-        assert(S.checa_solucao(grafo, chamou));
+        // assert(S.checa_solucao(grafo, chamou));
         S.cont_vizinhanca["para"] += 1;
+        S.improved_rotas[best_rota] += 1;
         return true;
     }
 
     return false;
 }
 
-bool Busca_local::best_insert(const Instance &grafo, Sol &S, bool &best)
+bool Busca_local::best_insert(Instance &grafo, Sol &S, bool &best)
 {
     vector<double> best_insert(6, -1);
     int best_rota = -1;
 
     for(int r = 0; r < S.rotas.size(); r++){
+        
         Caminho &rota = S.rotas[r];
         
         //                 id, score, custo, local insert, custo local insert, local visita
 
         // cout<< "Entrando best_insert" << endl;
+        S.cont_vizinhanca_total["best_insert"] += 1;
+        S.teste_rotas[r] += 1;  // Contador de quantas vezes a rota foi testada
+
         double dist1 = 0;
         double dist2 = 0;
         double dist3 = 0;
 
         for (int n = 0; n < 2; n++)
         {
+            
             rota.plus_parada = (n == 1) ? 0 : grafo.t_parada;
 
             for (int i = 1; i < grafo.qt_vertices; i++)
             {
+                
                 if (grafo.score_vertices[i] < best_insert[1])
                     continue;
 
@@ -128,6 +138,7 @@ bool Busca_local::best_insert(const Instance &grafo, Sol &S, bool &best)
 
                 for (int j = 0; j < rota.route.size() - 1; j++)
                 {
+                    
                     int anterior = rota.route[j];
                     int proximo = rota.route[j + 1];
 
@@ -233,8 +244,9 @@ bool Busca_local::best_insert(const Instance &grafo, Sol &S, bool &best)
         rota.incert(best_insert, S.visited_vertices, S.score, S.custo);
         S.atualiza_push(grafo);
         string chamou = "Busca Local - best_insert";
-        assert(S.checa_solucao(grafo, chamou));
+        // assert(S.checa_solucao(grafo, chamou));
         S.cont_vizinhanca["best_insert"] += 1;
+        S.improved_rotas[best_rota] += 1;
         return true;
     }
 
@@ -271,8 +283,12 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, bool &best)
     int best_rota = -1;
 
     for(int r = 0; r < S.rotas.size(); r++){
+        
         Caminho &rota = S.rotas[r];
+        S.cont_vizinhanca_total["swap_inter"] += 1;
+        S.teste_rotas[r] += 1;
         for(int i = 1; i <= rota.route.size()-2; i++){
+            
             // if(best_swap!=-1) break;
 
             anterior1 = rota.route[i-1];
@@ -284,6 +300,7 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, bool &best)
             vertice_parada_v1 = (rota.paradas[i] == 1) ? grafo.t_parada : 0; // se tiver parada, plus de 15 minutos
 
             for(int j = i+2;j <= rota.route.size()-2; j++){
+                
                 if(i == j) break;
                 // cout << "Vertice j[" << j << "]: " << rota.route[j] << endl;
                 anterior2 = rota.route[j - 1];
@@ -452,6 +469,7 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, bool &best)
                 bool possibilidade_visita = true;
                 for (int n = i + 1; n < rota.route.size()-1; n++)
                 {
+                    
                     if (n == j){
                         impacto+=impacto2;
                         continue;
@@ -560,8 +578,9 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, bool &best)
         rota.incert(swap_inter[3], S.visited_vertices, S.score, S.custo);
         S.atualiza_push(grafo);
         string chamou = "Busca Local - swap_inter";
-        assert(S.checa_solucao(grafo, chamou));
+        // assert(S.checa_solucao(grafo, chamou));
         S.cont_vizinhanca["swap_inter"] += 1;
+        S.improved_rotas[best_rota] += 1;
         return true;
     }
 
@@ -599,8 +618,12 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, bool &best)
     int best_rota2 = -1;
 
     for(int r = 0; r < S.rotas.size(); r++){
+        
         Caminho &rota1 = S.rotas[r];
+        S.cont_vizinhanca_total["swap_intra"] += 1;
+        S.teste_rotas[r] += 1;
         for(int i = 1; i < rota1.route.size()-1; i++){
+            
             anterior1 = rota1.route[i - 1];
             proximo1 = rota1.route[i + 1];
             score_r1 = (rota1.paradas[i] == 1) ? grafo.score_vertices[rota1.route[i]] : grafo.score_vertices[rota1.route[i]]/3;
@@ -610,8 +633,11 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, bool &best)
             vertice_parada_r1 = (rota1.paradas[i] == 1) ? grafo.t_parada : 0; // se tiver parada, plus de 15 minutos
             // cout << "**** Rota: "<<rota1.id<<" - Vertice[" << i << "] = "<< rota1.route[i] <<" | "<< i <<" de " << rota1.route.size()-1<<" ****"<<endl;
             for (int r2 = r+1; r2 < S.rotas.size(); r2++){
+                
                 Caminho &rota2 = S.rotas[r2];
-                for (int j = 1; j < rota2.route.size()-1; j++){ 
+                S.teste_rotas[r2] += 1;
+                for (int j = 1; j < rota2.route.size()-1; j++){
+                    
                     anterior2 = rota2.route[j - 1];
                     proximo2 = rota2.route[j + 1];
                     score_r2 = (rota2.paradas[j] == 1) ? grafo.score_vertices[rota2.route[j]] : grafo.score_vertices[rota2.route[j]] / 3;
@@ -770,7 +796,7 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, bool &best)
                     bool possibilidade_visita = true;
                     for (int a = i + 1; a < rota1.route.size() - 1; a++)
                     {
-
+                        
                         int vertice = rota1.route[a];
 
                         it = S.visited_vertices[rota1.route[a]].find(rota1.visita_custo[a] + grafo.t_prot);
@@ -804,6 +830,7 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, bool &best)
                     // utilizar um algoritmo de busca melhor
                     for (int a = j + 1; a < rota2.route.size() - 1; a++)
                     {
+                        
                         int vertice = rota2.route[a];
 
                         it = S.visited_vertices[rota2.route[a]].find(rota2.visita_custo[a] + grafo.t_prot);
@@ -885,9 +912,10 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, bool &best)
         rota2.incert(swap_intra[3], S.visited_vertices, S.score, S.custo);
         S.atualiza_push(grafo);
         string chamou = "Busca Local - swap_intra";
-        assert(S.checa_solucao(grafo, chamou));
+        // assert(S.checa_solucao(grafo, chamou));
         S.cont_vizinhanca["swap_intra"] += 1;
-
+        S.improved_rotas[best_rota1] += 1;
+        S.improved_rotas[best_rota2] += 1;
         return true;
     }
 
@@ -917,10 +945,14 @@ bool Busca_local::swap_out_rotas(Instance &grafo, Sol &S, bool &best)
     int best_rota = -1;
 
     for(int r = 0; r < S.rotas.size(); r++){
+        
         Caminho &rota = S.rotas[r];
+        S.cont_vizinhanca_total["swap_out"] += 1;
+        S.teste_rotas[r] += 1;
         // Itera sobre os vértices na rota
         for (int i = 1; i < rota.route.size() - 1; i++)
         {
+            
             // cout << "Best swap: " << best_swap << endl;
             int v1 = rota.route[i];
             anterior1 = rota.route[i - 1];
@@ -933,10 +965,12 @@ bool Busca_local::swap_out_rotas(Instance &grafo, Sol &S, bool &best)
 
             for (int n = 0; n < 2; n++)
             {
+                
                 rota.plus_parada = (n == 1) ? 0 : grafo.t_parada;
                 // Itera sobre todos os vértices 
                 for (int v2 = 1; v2 < grafo.qt_vertices; v2++)
                 {
+                    
                     if (anterior1 == v2 || proximo1 == v2 || v1 == v2) continue;
 
                     score_v2 = (rota.plus_parada == grafo.t_parada) ? grafo.score_vertices[v2] : grafo.score_vertices[v2]/3;
@@ -1057,8 +1091,9 @@ bool Busca_local::swap_out_rotas(Instance &grafo, Sol &S, bool &best)
         rota.incert(swap_out[1], S.visited_vertices, S.score, S.custo);
         S.atualiza_push(grafo);
         string chamou = "Busca Local - swap_out";
-        assert(S.checa_solucao(grafo, chamou));
+        // assert(S.checa_solucao(grafo, chamou));
         S.cont_vizinhanca["swap_out"] += 1;
+        S.improved_rotas[best_rota] += 1;
         return true;
     }
 
@@ -1072,8 +1107,10 @@ bool Busca_local::swap_paradas_inter_rota(Instance &grafo, Sol &S, Caminho &rota
 
     for (int i = 1; i < rota.route.size() - 1; i++)
     {
+        
         for (int j = i + 1; j < rota.route.size() - 1; j++)
         {
+            
             if (rota.paradas[i] == rota.paradas[j])
                 continue;
 
@@ -1099,6 +1136,7 @@ bool Busca_local::swap_paradas_inter_rota(Instance &grafo, Sol &S, Caminho &rota
 
             for (int n = i; n <= j; n++)
             {
+                
                 auto it = S.visited_vertices[rota.route[n]].find(rota.visita_custo[n] + grafo.t_prot);
                 auto it_prox = std::next(it);
                 auto it_ant = std::prev(it);

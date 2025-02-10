@@ -5,7 +5,6 @@
 Instance::Instance(const string &filename)
 {
     ifstream file(filename);
-
     if (!file.is_open()) {
         cerr << "Erro ao abrir o arquivo!" << endl;
         exit(1);
@@ -44,6 +43,8 @@ Instance::Instance(const string &filename)
             distancia_matriz[i][j] = aux/metros_p_segundo;
         }
     }
+
+    iteracoes_totais = 0;
 
     //for (int i = 0; i < qt_vertices; i++) {
         //for (int j = 0; j < qt_vertices; j++) {

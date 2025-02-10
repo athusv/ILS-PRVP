@@ -49,6 +49,7 @@ int Utils::cost_benefit(const std::vector<int> &lista_candidatos,const vector<do
 }
 
 std::vector<int> Utils::make_lista(Instance& grafo, Caminho& rota, std::vector<std::map<double, int>>& visited_vertices) {
+    // cout << "grafo.iteracoes_totais" << endl;
     std::vector<int> lista_de_candidatos;
     for (int i = 1; i < grafo.qt_vertices; i++) {
         if (visited_vertices[i].empty() || doubleLessOrEqual(visited_vertices[i].rbegin()->first, rota.custo)) {

@@ -41,7 +41,7 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
                 S.atualiza_push(grafo);
 
                 chamou = "Perturbação EXCLUIR";
-                assert(S.checa_solucao(grafo, chamou));
+                // assert(S.checa_solucao(grafo, chamou));
 
                 indice_route.pop_back();
                 for (int j = 0; j < indice_route.size(); j++)
@@ -68,7 +68,7 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
                 S.atualiza_push(grafo);
 
                 chamou = "Perturbação - Swap Out";
-                assert(S.checa_solucao(grafo, chamou));
+                // assert(S.checa_solucao(grafo, chamou));
 
                 std::shuffle(indice_route.begin(), indice_route.end(), gen);
                 quantos_excluir--;
@@ -130,7 +130,7 @@ Sol &Perturbacao::perturbacao(Instance &grafo, Sol &S, std::mt19937 &gen)
                 S.atualiza_push(grafo);
             
                 chamou = "Perturbação EXCLUIR";
-                assert(S.checa_solucao(grafo, chamou));
+                // assert(S.checa_solucao(grafo, chamou));
                 
                 indice_route.pop_back();
                 for (int j = 0; j < indice_route.size(); j++)

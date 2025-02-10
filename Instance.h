@@ -10,6 +10,7 @@ using namespace std;
 
 class Instance {
 public:
+    long long int iteracoes_totais;
     int qt_vertices;
     int veiculos;
     double t_max;

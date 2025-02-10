@@ -15,6 +15,8 @@ Sol::Sol(const Instance &grafo) {
         aux_rota.visita_custo.push_back(0);
         aux_rota.push_hotspots.push_back({999, 999});
         rotas.push_back(aux_rota);
+        improved_rotas[i] = 0;
+        teste_rotas[i] = 0;
     }
 }
 
@@ -204,8 +206,9 @@ bool Sol::checa_solucao(const Instance &grafo, string &chamou) {
     return true;
 }
 
-void Sol::atualiza_push(const Instance &grafo) {
+void Sol::atualiza_push(Instance &grafo) {
     for (auto &rota : rotas){
+        grafo.iteracoes_totais += 1;
         rota.atualizar_push_hotspots(visited_vertices);
     }
 }
