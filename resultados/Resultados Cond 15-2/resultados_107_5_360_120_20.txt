@@ -1,0 +1,74 @@
+Tempo Máximo: 108000
+Seed: 3004545370 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_5_360_120_20.txt | Vértices: 107 | Veículos: 5
+Solução Construtivo - Score: 4146 | Custo: 106601
+Solução ILS - Score: 5689 | Custo: 107800
+Melhoria de 37.2166%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 746/4210
+Swap Inter = 209/3230
+Swap Intra = 336/3520
+Swap Out = 433/3555
+Para = 4/2970
+Contagem de Melhorias por rota
+Rota 0= 386/3497
+Rota 1= 469/28354
+Rota 2= 462/65039
+Rota 3= 498/103580
+Rota 4= 249/151605
+Iterações totais: 1628265
+***********************************************
+
+Tempo Máximo: 108000
+Seed: 389619894 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_5_360_120_20.txt | Vértices: 107 | Veículos: 5
+Solução Construtivo - Score: 4116.67 | Custo: 106740
+Solução ILS - Score: 5662 | Custo: 107954
+Melhoria de 37.5385%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 476/2705
+Swap Inter = 152/2210
+Swap Intra = 167/2115
+Swap Out = 278/2365
+Para = 4/2000
+Contagem de Melhorias por rota
+Rota 0= 168/2279
+Rota 1= 202/18068
+Rota 2= 331/36123
+Rota 3= 282/59834
+Rota 4= 261/85123
+Iterações totais: 3205394
+***********************************************
+
+Tempo Máximo: 108000
+Seed: 3921444320 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_5_360_120_20.txt | Vértices: 107 | Veículos: 5
+Solução Construtivo - Score: 4035 | Custo: 105423
+Solução ILS - Score: 5804 | Custo: 107680
+Melhoria de 43.8414%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 577/3320
+Swap Inter = 257/2805
+Swap Intra = 347/2765
+Swap Out = 360/3055
+Para = 8/2480
+Contagem de Melhorias por rota
+Rota 0= 408/2885
+Rota 1= 349/24363
+Rota 2= 249/48197
+Rota 3= 354/71446
+Rota 4= 536/104590
+Iterações totais: 4858567
+***********************************************
+
+-- Seed da melhor execução: 3921444320
+-- Média de iterações: 1619522
+-- Pontuação do Construtivo da melhor execução: 4035
+-- Média de pontuação ILS: 5718.33
+-- Melhor pontuação: 5804

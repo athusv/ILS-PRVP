@@ -1,0 +1,65 @@
+Tempo Máximo: 43200
+Seed: 2928538128 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_2_360_120_20.txt | Vértices: 47 | Veículos: 2
+Solução Construtivo - Score: 2726.33 | Custo: 41879.7
+Solução ILS - Score: 3989 | Custo: 43096.3
+Melhoria de 46.3137%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 466/1104
+Swap Inter = 236/940
+Swap Intra = 104/786
+Swap Out = 253/928
+Para = 5/792
+Contagem de Melhorias por rota
+Rota 0= 634/2275
+Rota 1= 534/22572
+Iterações totais: 2430259
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 1998837066 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_2_360_120_20.txt | Vértices: 47 | Veículos: 2
+Solução Construtivo - Score: 2689.67 | Custo: 42569.9
+Solução ILS - Score: 3996.67 | Custo: 43151.3
+Melhoria de 48.5934%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 263/656
+Swap Inter = 168/630
+Swap Intra = 92/546
+Swap Out = 156/612
+Para = 4/476
+Contagem de Melhorias por rota
+Rota 0= 439/1460
+Rota 1= 336/16443
+Iterações totais: 4878813
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 2282745148 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_2_360_120_20.txt | Vértices: 47 | Veículos: 2
+Solução Construtivo - Score: 2604.33 | Custo: 41675
+Solução ILS - Score: 4004.67 | Custo: 43145.6
+Melhoria de 53.7694%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 350/864
+Swap Inter = 181/720
+Swap Intra = 122/660
+Swap Out = 199/714
+Para = 4/586
+Contagem de Melhorias por rota
+Rota 0= 460/1772
+Rota 1= 518/18672
+Iterações totais: 7463127
+***********************************************
+
+-- Seed da melhor execução: 2282745148
+-- Média de iterações: 2487709
+-- Pontuação do Construtivo da melhor execução: 2604.33
+-- Média de pontuação ILS: 3996.78
+-- Melhor pontuação: 4004.67

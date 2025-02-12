@@ -135,7 +135,7 @@ clean:
 
 # Executa o programa com os argumentos fornecidos
 run: $(TARGET)
-	./$(TARGET) 146_1_360_120_20.txt
+	./$(TARGET) 47_5_360_120_20.txt
 	# ./$(TARGET) 16_1_360_180_20.txt
 	# ./$(TARGET) 21_1_360_90_20.txt
 	# ./$(TARGET) 107_5_360_120_20.txt

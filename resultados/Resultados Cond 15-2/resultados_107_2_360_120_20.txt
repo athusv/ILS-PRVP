@@ -1,0 +1,65 @@
+Tempo Máximo: 43200
+Seed: 2710061965 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2176.67 | Custo: 42006.6
+Solução ILS - Score: 4355 | Custo: 43196.1
+Melhoria de 100.077%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 1057/2456
+Swap Inter = 313/1806
+Swap Intra = 80/1712
+Swap Out = 612/1996
+Para = 1/1574
+Contagem de Melhorias por rota
+Rota 0= 1285/4772
+Rota 1= 858/94034
+Iterações totais: 871767
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 1343202376 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2376.67 | Custo: 41787.9
+Solução ILS - Score: 3990.33 | Custo: 43188.9
+Melhoria de 67.8962%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 629/1452
+Swap Inter = 116/982
+Swap Intra = 77/1006
+Swap Out = 384/1236
+Para = 3/970
+Contagem de Melhorias por rota
+Rota 0= 670/2823
+Rota 1= 616/43699
+Iterações totais: 1408476
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 2622666757 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 1932.67 | Custo: 41937.4
+Solução ILS - Score: 3799 | Custo: 43197.2
+Melhoria de 96.5678%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 306/692
+Swap Inter = 73/536
+Swap Intra = 37/518
+Swap Out = 185/588
+Para = 1/512
+Contagem de Melhorias por rota
+Rota 0= 274/1423
+Rota 1= 365/18171
+Iterações totais: 1420109
+***********************************************
+
+-- Seed da melhor execução: 2710061965
+-- Média de iterações: 473369
+-- Pontuação do Construtivo da melhor execução: 2176.67
+-- Média de pontuação ILS: 4048.11
+-- Melhor pontuação: 4355

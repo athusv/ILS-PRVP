@@ -177,12 +177,11 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
     string chamou;
 
     auto inicio = std::chrono::high_resolution_clock::now();
-    int it_total = 1;
     int it_sem_melhora = 0;
 
     while (true)
     {
-        grafo.iteracoes_totais++;
+        
         double porcentagem_perturbacao = static_cast<double>(it_sem_melhora) / max_it_sem_melhora;
         // cout << "Iteraçao sem melhora: " << it_sem_melhora << " || Max iteraçao: " << max_it_sem_melhora << endl;
         s1 = s;
@@ -248,8 +247,9 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
             // std::cout << "Iteração: " << it_total << "\n";
             break;
         }
+        
 
-        it_total++;
+        grafo.iteracoes_totais++;
     }
 
     return best_global;
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     
     unsigned int seed_value;
     std::random_device rd;
-    double tempo_maximo = 1 * 60.0;
+    double tempo_maximo = 3 * 60.0;
     int max_it_sem_melhora = 1000;
 
     string instancia = string(argv[1]);
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
     Instance grafo("Instancias/" + instancia);
     Sol best_s = Sol(grafo);
     double mean_score = 0;
-    double mean_it = 0;
+    long long int mean_it = 0;
     double b_score_construtivo;
     unsigned int seed_best;
     int n;
@@ -330,14 +330,12 @@ int main(int argc, char *argv[])
     }
 
     mean_score = mean_score/n;
-    mean_it = grafo.iteracoes_totais/n;
+    mean_it = static_cast<int> (grafo.iteracoes_totais / n);
     outputFile << "-- Seed da melhor execução: " << seed_best << std::endl;
     outputFile << "-- Média de iterações: " << mean_it << std::endl;
     outputFile << "-- Pontuação do Construtivo da melhor execução: " << b_score_construtivo << std::endl;
     outputFile << "-- Média de pontuação ILS: " << mean_score << std::endl;
     outputFile << "-- Melhor pontuação: " << best_s.score << std::endl;
-    // double percentual_melhora = (static_cast<double>(best_s.score - b_score_construtivo) / b_score_construtivo) * 100;
-    // outputFile << "-- Melhoria na melhor execução: " << best_s.score << "%"<<std::endl;
     outputFile.close();
     // instancia, seed_best, tempo, total_iterações, it_reset, mean_score, best_score, custo,
     cout << instancia << ", " << seed_best << ", " << tempo_maximo << ", " << mean_it << ", " << max_it_sem_melhora << ", " << mean_score << ", " << best_s.score << endl;
@@ -351,9 +349,6 @@ int main(int argc, char *argv[])
     //     random_device rd;
     //     seed_value = rd();
     // }
-    
-
-
 
     // exportar um .TXT
 }
