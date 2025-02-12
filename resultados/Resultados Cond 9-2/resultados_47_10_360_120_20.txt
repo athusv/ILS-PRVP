@@ -1,0 +1,89 @@
+Tempo Máximo: 216000
+Seed: 677815896 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_10_360_120_20.txt | Vértices: 47 | Veículos: 10
+Solução Construtivo - Score: 1692.67 | Custo: 36362.7
+Solução ILS - Score: 5325 | Custo: 102867
+Melhoria de 214.592%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 1067/2963
+Swap Inter = 488/2752
+Swap Intra = 629/2413
+Swap Out = 526/2703
+Para = 165/2660
+Contagem de Melhorias por rota
+Rota 3= 106/1156
+Rota 7= 96/1123
+Rota 8= 372/1675
+Rota 5= 95/1162
+Rota 4= 922/2665
+Rota 0= 111/1129
+Rota 1= 101/1119
+Rota 6= 1309/3192
+Rota 9= 290/1529
+Rota 2= 102/1154
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 216000
+Seed: 4164643492 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_10_360_120_20.txt | Vértices: 47 | Veículos: 10
+Solução Construtivo - Score: 1678 | Custo: 32705.8
+Solução ILS - Score: 5357.33 | Custo: 102812
+Melhoria de 219.269%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 942/2586
+Swap Inter = 414/2387
+Swap Intra = 682/2200
+Swap Out = 487/2376
+Para = 137/2287
+Contagem de Melhorias por rota
+Rota 9= 521/1721
+Rota 3= 802/2276
+Rota 2= 100/981
+Rota 5= 1270/2997
+Rota 1= 85/971
+Rota 0= 252/1327
+Rota 8= 84/962
+Rota 4= 70/914
+Rota 6= 73/947
+Rota 7= 87/940
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 216000
+Seed: 2299772579 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_10_360_120_20.txt | Vértices: 47 | Veículos: 10
+Solução Construtivo - Score: 1700 | Custo: 36446.5
+Solução ILS - Score: 5085.67 | Custo: 89284.2
+Melhoria de 199.157%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 803/2175
+Swap Inter = 391/2062
+Swap Intra = 483/1789
+Swap Out = 488/2111
+Para = 128/1990
+Contagem de Melhorias por rota
+Rota 0= 81/855
+Rota 1= 112/910
+Rota 6= 434/1562
+Rota 5= 545/1710
+Rota 7= 92/881
+Rota 8= 1133/2549
+Rota 2= 94/868
+Rota 9= 111/868
+Rota 4= 97/864
+Rota 3= 77/849
+Iterações totais: 0
+***********************************************
+
+-- Seed da melhor execução: 4164643492
+-- Média de iterações: 0
+-- Pontuação do Construtivo da melhor execução: 1678
+-- Média de pontuação ILS: 5256
+-- Melhor pontuação: 5357.33

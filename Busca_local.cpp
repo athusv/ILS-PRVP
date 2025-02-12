@@ -22,7 +22,7 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
     bool best_improvement = true;
 
     vector<Operacao> operacoes = {Operacao::Insert, Operacao::SwapInter, Operacao::SwapIntra, Operacao::SwapOut, Operacao::Para};
-
+    // cout << "Busca Local" << endl;
     while (!S.rotas.empty()) {
         Caminho rota = S.rotas.top(); //colocar para vector
         S.rotas.pop();
@@ -33,6 +33,8 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
         for (const auto &operacao : operacoes)
         {
             if (operacao == Operacao::Insert){
+                S.cont_vizinhanca_total["best_insert"] += 1;
+                S.teste_rotas[rota.id] += 1;
                 // insert
                 if (Busca_local::best_insert(grafo, S, rota, best_improvement))
                 {
@@ -43,11 +45,14 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
 
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
-                    S.cont_vizinhanca["best_incert"]+=1;
+                    S.cont_vizinhanca["best_insert"]+=1;
+                    S.improved_rotas[rota.id] += 1;
                     break;
                 }
             }
             else if(operacao == Operacao::SwapInter){
+                S.cont_vizinhanca_total["swap_inter"] += 1;
+                S.teste_rotas[rota.id] += 1;
                 if (swap_inter_rotas(grafo, S, rota, best_improvement))
                 {
                     
@@ -58,10 +63,13 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
                     S.cont_vizinhanca["swap_inter"] += 1;
+                    S.improved_rotas[rota.id] += 1;
                     break;
                 }
             }
             else if(operacao == Operacao::Para){
+                S.cont_vizinhanca_total["para"] += 1;
+                S.teste_rotas[rota.id] += 1;
                 if(para(grafo, S, rota, best_improvement)){
                     
                     S.rotas.push(rota);
@@ -70,20 +78,23 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
                     S.cont_vizinhanca["para"] += 1;
+                    S.improved_rotas[rota.id] += 1;
                     break;
                 }
             }
             else if (operacao == Operacao::SwapOut){
                 // Swap vértice fora da rota
+                S.cont_vizinhanca_total["swap_out"] += 1;
+                S.teste_rotas[rota.id] += 1;
                 if (swap_Out_rotas(grafo, S, rota, 1, rota.route.size() - 1, best_improvement))
-                {
-                    
+                {   
                     S.rotas.push(rota);
                     S.atualiza_push(grafo);
                     chamou = "Busca Local - Swap Out";
                     assert(S.checa_solucao(grafo, chamou));
                     realizou_melhora = true;
                     S.cont_vizinhanca["swap_out"] += 1;
+                    S.improved_rotas[rota.id] += 1;
                     break;
                 }
             }
@@ -96,7 +107,9 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                 {
                     Caminho rota2 = S.rotas.top();
                     S.rotas.pop();
-                    
+                    S.cont_vizinhanca_total["swap_intra"] += 1;
+                    S.teste_rotas[rota.id] += 1;
+                    S.teste_rotas[rota2.id] += 1;
                     if (swap_intra_rotas(grafo, S, rota, rota2, 1, rota.route.size()-1, best_improvement))
                     {
                         
@@ -107,6 +120,8 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
                         assert(S.checa_solucao(grafo, chamou));
                         realizou_melhora = true;
                         S.cont_vizinhanca["swap_intra"] += 1;
+                        S.improved_rotas[rota.id] += 1;
+                        S.improved_rotas[rota2.id] += 1;
                         break;
                     }
 

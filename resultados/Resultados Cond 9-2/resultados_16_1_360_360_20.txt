@@ -1,0 +1,62 @@
+Tempo Máximo: 21600
+Seed: 2052294871 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 16_1_360_360_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 201 | Custo: 10153.8
+Solução ILS - Score: 249 | Custo: 14396.7
+Melhoria de 23.8806%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 0/3
+Swap Inter = 4/6
+Swap Intra = 0/0
+Swap Out = 0/4
+Para = 4/5
+Contagem de Melhorias por rota
+Rota 0= 8/18
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 2083719527 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 16_1_360_360_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 196.333 | Custo: 9870.74
+Solução ILS - Score: 249 | Custo: 14254.9
+Melhoria de 26.8251%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 0/5
+Swap Inter = 10/11
+Swap Intra = 0/0
+Swap Out = 0/6
+Para = 3/6
+Contagem de Melhorias por rota
+Rota 0= 13/28
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 3823733958 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 360min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 16_1_360_360_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 219.667 | Custo: 12034.7
+Solução ILS - Score: 249 | Custo: 14388.5
+Melhoria de 13.3536%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 0/7
+Swap Inter = 3/5
+Swap Intra = 0/0
+Swap Out = 0/6
+Para = 8/9
+Contagem de Melhorias por rota
+Rota 0= 11/27
+Iterações totais: 0
+***********************************************
+
+-- Seed da melhor execução: 3823733958
+-- Média de iterações: 0
+-- Pontuação do Construtivo da melhor execução: 219.667
+-- Média de pontuação ILS: 249
+-- Melhor pontuação: 249

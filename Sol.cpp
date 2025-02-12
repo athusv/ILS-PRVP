@@ -15,6 +15,8 @@ Sol::Sol(const Instance &grafo) {
         aux_rota.visita_custo.push_back(0);
         aux_rota.push_hotspots.push_back({999, 999});
         rotas.push(aux_rota);
+        improved_rotas[i] = 0;
+        teste_rotas[i] = 0;
     }
 }
 

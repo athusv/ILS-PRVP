@@ -64,6 +64,7 @@ std::vector<int> Utils::make_lista(Instance& grafo, Caminho& rota, std::vector<s
 
 std::vector<double> Utils::p_excluir(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, Caminho& rota, int i) {
     std::vector<double> exclui_vertice = {-1, -1, -1, -1};
+    // cout << "p_excluir" << endl;
     double dist1 = grafo.distancia_matriz[rota.route[i - 1]][rota.route[i]];
     double dist2 = grafo.distancia_matriz[rota.route[i]][rota.route[i + 1]];
     double dist3 = grafo.distancia_matriz[rota.route[i - 1]][rota.route[i + 1]];

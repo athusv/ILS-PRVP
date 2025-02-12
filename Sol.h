@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <utility>
 #include <algorithm>
 #include <queue>
@@ -18,9 +19,13 @@ private:
 public:
     double score = 0;
     double custo = 0;
+    int iteracoes = 0;
     priority_queue<Caminho> rotas;
     vector<map<double, int>> visited_vertices;  // numero_vertice - quando/quem visitou
-    map<string, int> cont_vizinhanca = {{"best_incert", 0},{"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}};
+    map<string, int> cont_vizinhanca = {{"best_insert", 0},{"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}};
+    unordered_map<string, int> cont_vizinhanca_total = {{"best_insert", 0}, {"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}};
+    unordered_map<int, int> improved_rotas;
+    unordered_map<int, int> teste_rotas;
 
     Sol(const Instance &grafo);
     void print_visited(int inicio, int final) const;

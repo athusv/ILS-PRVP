@@ -6,7 +6,7 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
     bool best_improvement = false;
 
     std::priority_queue<Caminho> aux_rotas;
-
+    // cout << "Perturbação" << endl;
     while (!S.rotas.empty())
     {
         Caminho rota = S.rotas.top();
@@ -17,7 +17,7 @@ Sol &Perturbacao::perturbacao_strength(Instance &grafo, Sol &S, std::mt19937 &ge
         // std::cout << std::endl
         //           << rota << std::endl
         //           << std::endl;
-
+        
         std::vector<int> indice_route;
         for (int i = 1; i < rota.route.size() - 1; i++)
         {

@@ -1,0 +1,65 @@
+Tempo Máximo: 43200
+Seed: 1549624879 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2300.33 | Custo: 41734.5
+Solução ILS - Score: 4173.33 | Custo: 43184.6
+Melhoria de 81.423%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 482/660
+Swap Inter = 129/496
+Swap Intra = 77/373
+Swap Out = 267/535
+Para = 1/465
+Contagem de Melhorias por rota
+Rota 0= 560/1534
+Rota 1= 473/1368
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 521699607 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2005 | Custo: 42465.4
+Solução ILS - Score: 4152.67 | Custo: 43196.2
+Melhoria de 107.116%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 1198/1632
+Swap Inter = 225/1273
+Swap Intra = 205/918
+Swap Out = 661/1366
+Para = 1/1224
+Contagem de Melhorias por rota
+Rota 0= 1352/3819
+Rota 1= 1143/3512
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 991677636 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2148.33 | Custo: 42775.4
+Solução ILS - Score: 4173.33 | Custo: 43184.1
+Melhoria de 94.2591%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 910/1279
+Swap Inter = 273/1015
+Swap Intra = 165/719
+Swap Out = 476/1022
+Para = 2/927
+Contagem de Melhorias por rota
+Rota 1= 764/2456
+Rota 0= 1227/3225
+Iterações totais: 0
+***********************************************
+
+-- Seed da melhor execução: 1549624879
+-- Média de iterações: 0
+-- Pontuação do Construtivo da melhor execução: 2300.33
+-- Média de pontuação ILS: 4166.44
+-- Melhor pontuação: 4173.33

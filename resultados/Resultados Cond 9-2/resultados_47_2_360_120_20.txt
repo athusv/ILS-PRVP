@@ -1,0 +1,65 @@
+Tempo Máximo: 43200
+Seed: 1051808220 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_2_360_120_20.txt | Vértices: 47 | Veículos: 2
+Solução Construtivo - Score: 2586.33 | Custo: 42584.2
+Solução ILS - Score: 4024.67 | Custo: 43177.7
+Melhoria de 55.6128%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 453/697
+Swap Inter = 160/589
+Swap Intra = 73/378
+Swap Out = 237/589
+Para = 0/543
+Contagem de Melhorias por rota
+Rota 1= 515/1599
+Rota 0= 481/1575
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 3857966499 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_2_360_120_20.txt | Vértices: 47 | Veículos: 2
+Solução Construtivo - Score: 2596.33 | Custo: 42059.9
+Solução ILS - Score: 4013.33 | Custo: 43134.8
+Melhoria de 54.577%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 411/571
+Swap Inter = 201/509
+Swap Intra = 163/381
+Swap Out = 233/509
+Para = 3/425
+Contagem de Melhorias por rota
+Rota 0= 574/1332
+Rota 1= 600/1444
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 4050051383 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_2_360_120_20.txt | Vértices: 47 | Veículos: 2
+Solução Construtivo - Score: 2493 | Custo: 42921.4
+Solução ILS - Score: 4047 | Custo: 43191.9
+Melhoria de 62.3345%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 522/733
+Swap Inter = 319/665
+Swap Intra = 194/479
+Swap Out = 295/644
+Para = 0/537
+Contagem de Melhorias por rota
+Rota 1= 749/1817
+Rota 0= 775/1720
+Iterações totais: 0
+***********************************************
+
+-- Seed da melhor execução: 4050051383
+-- Média de iterações: 0
+-- Pontuação do Construtivo da melhor execução: 2493
+-- Média de pontuação ILS: 4028.33
+-- Melhor pontuação: 4047

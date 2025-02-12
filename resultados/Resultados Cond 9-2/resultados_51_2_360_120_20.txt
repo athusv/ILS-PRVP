@@ -1,0 +1,65 @@
+Tempo Máximo: 43200
+Seed: 1246805427 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 51_2_360_120_20.txt | Vértices: 51 | Veículos: 2
+Solução Construtivo - Score: 267.667 | Custo: 41597.1
+Solução ILS - Score: 405.667 | Custo: 43172.9
+Melhoria de 51.5567%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 294/405
+Swap Inter = 147/360
+Swap Intra = 87/252
+Swap Out = 135/350
+Para = 3/329
+Contagem de Melhorias por rota
+Rota 0= 310/877
+Rota 1= 443/1071
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 1484795865 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 51_2_360_120_20.txt | Vértices: 51 | Veículos: 2
+Solução Construtivo - Score: 273.333 | Custo: 42128.8
+Solução ILS - Score: 405 | Custo: 43165.3
+Melhoria de 48.1707%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 320/461
+Swap Inter = 165/377
+Swap Intra = 122/289
+Swap Out = 145/362
+Para = 2/333
+Contagem de Melhorias por rota
+Rota 1= 343/881
+Rota 0= 533/1230
+Iterações totais: 0
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 1657853244 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 51_2_360_120_20.txt | Vértices: 51 | Veículos: 2
+Solução Construtivo - Score: 272.667 | Custo: 42641.9
+Solução ILS - Score: 405.667 | Custo: 42912.6
+Melhoria de 48.7775%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 221/340
+Swap Inter = 112/287
+Swap Intra = 91/205
+Swap Out = 102/273
+Para = 1/256
+Contagem de Melhorias por rota
+Rota 1= 342/848
+Rota 0= 276/718
+Iterações totais: 0
+***********************************************
+
+-- Seed da melhor execução: 1657853244
+-- Média de iterações: 0
+-- Pontuação do Construtivo da melhor execução: 272.667
+-- Média de pontuação ILS: 405.444
+-- Melhor pontuação: 405.667
