@@ -7,8 +7,8 @@ Caminho::Caminho(int id, int t_prot, int t_parada) {
     this->t_parada = t_parada;
 }
 
-void Caminho::incert(vector<double> &best_insert, vector<map<double, int> > &visited_vertices, double &score_s,
-                     double &custo_s) {
+void Caminho::insert_v(vector<double> &best_insert, vector<map<double, int>> &visited_vertices, double &score_s, double &custo_s)
+{
     // id, score, impacto, local insert, visita_custo, para ou nao
 
     score += best_insert[1];
@@ -29,7 +29,7 @@ void Caminho::incert(vector<double> &best_insert, vector<map<double, int> > &vis
     atualizar_push_hotspots(visited_vertices);
 }
 
-void Caminho::excluir(vector<double> &exclui_vertice, vector<map<double, int>> &visited_vertices, double &score_s, double &custo_s) 
+void Caminho::excluir(vector<double> &exclui_vertice, vector<map<double, int>> &visited_vertices, double &score_s, double &custo_s)
 {
     int indice = static_cast<int>(exclui_vertice[3]);
     double score_vertice = exclui_vertice[1];

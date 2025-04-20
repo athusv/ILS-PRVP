@@ -22,8 +22,8 @@ public:
     int iteracoes = 0;
     priority_queue<Caminho> rotas;
     vector<map<double, int>> visited_vertices;  // numero_vertice - quando/quem visitou
-    map<string, int> cont_vizinhanca = {{"best_insert", 0},{"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}};
-    unordered_map<string, int> cont_vizinhanca_total = {{"best_insert", 0}, {"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}};
+    map<string, int> cont_vizinhanca = {{"best_insert", 0},{"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}, {"realocate", 0}};
+    unordered_map<string, int> cont_vizinhanca_total = {{"best_insert", 0}, {"swap_inter", 0}, {"swap_intra", 0}, {"swap_out", 0}, {"para", 0}, {"realocate", 0}};
     unordered_map<int, int> improved_rotas;
     unordered_map<int, int> teste_rotas;
 

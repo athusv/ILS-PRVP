@@ -1,0 +1,65 @@
+Tempo Máximo: 21600
+Seed: 1040136776 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 146_1_360_120_20.txt | Vértices: 146 | Veículos: 1
+Solução Construtivo - Score: 179.333 | Custo: 21443.3
+Solução ILS - Score: 709 | Custo: 21594.6
+Melhoria de 295.353%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 323/406
+Swap Inter = 26/301
+Swap Intra = 0/0
+Swap Out = 229/367
+Para = 1/291
+Realocate = 186/362
+Contagem de Melhorias por rota
+Rota 0= 765/1727
+Iterações totais: 7760
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 3793347317 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 146_1_360_120_20.txt | Vértices: 146 | Veículos: 1
+Solução Construtivo - Score: 230.333 | Custo: 21444.8
+Solução ILS - Score: 692 | Custo: 21599.1
+Melhoria de 200.434%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 222/285
+Swap Inter = 31/223
+Swap Intra = 0/0
+Swap Out = 157/264
+Para = 1/213
+Realocate = 120/228
+Contagem de Melhorias por rota
+Rota 0= 531/1213
+Iterações totais: 12135
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 1556215572 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 146_1_360_120_20.txt | Vértices: 146 | Veículos: 1
+Solução Construtivo - Score: 271 | Custo: 21083.6
+Solução ILS - Score: 721 | Custo: 21597.5
+Melhoria de 166.052%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 415/532
+Swap Inter = 68/411
+Swap Intra = 0/0
+Swap Out = 262/478
+Para = 1/382
+Realocate = 276/461
+Contagem de Melhorias por rota
+Rota 0= 1022/2264
+Iterações totais: 6580
+***********************************************
+
+-- Seed da melhor execução: 1556215572
+-- Média de iterações: 2193
+-- Pontuação do Construtivo da melhor execução: 271
+-- Média de pontuação ILS: 707.333
+-- Melhor pontuação: 721

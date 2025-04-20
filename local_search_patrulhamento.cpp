@@ -270,7 +270,7 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
     string chamou;
 
     auto inicio = std::chrono::high_resolution_clock::now();
-    int it_total = 1;
+    grafo.iteracoes_totais = 0;
     int it_sem_melhora = 0;
     // cout << "ah" << endl;
     while (true)
@@ -341,7 +341,7 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
             break;
         }
         // cout << "ah" << endl;
-        it_total++;
+        grafo.iteracoes_totais++;
     }
 
     return best_global;
@@ -352,12 +352,22 @@ int main(int argc, char *argv[])
 
     unsigned int seed_value;
     std::random_device rd;
-    double tempo_maximo = 3 * 60.0;
+    double tempo_maximo = 180.0;
     int max_it_sem_melhora = 1000;
 
     string instancia = string(argv[1]);
     // Instance grafo("C:/Users/athus/Faculdade/6 periodo/PIBIT/solucao/pibit-rotas-pm/misc/ILS-algoritm/" + instancia, t_prot, t_parada, velocidade);
-
+    if (argc > 2)
+    {
+        seed_value = stoul(argv[2]);
+        // cout << "Seed fornecida: " << seed_value << std::endl;
+    }
+    else
+    {
+        random_device rd;
+        seed_value = rd();
+        // cout << "Seed aleatória gerada: " << seed_value << std::endl;
+    }
     std::ofstream outputFile("resultados_" + instancia);
 
     // Verifica se o arquivo foi aberto corretamente
@@ -366,7 +376,7 @@ int main(int argc, char *argv[])
         std::cerr << "Erro ao abrir o arquivo!" << std::endl;
         return 1;
     }
-
+    
     Instance grafo("Instancias/" + instancia);
     Sol best_s = Sol(grafo);
     double mean_score = 0;
@@ -414,7 +424,7 @@ int main(int argc, char *argv[])
         outputFile << "Swap Intra = " << s1.cont_vizinhanca["swap_intra"] << "/" << s1.cont_vizinhanca_total["swap_intra"] << endl;
         outputFile << "Swap Out = " << s1.cont_vizinhanca["swap_out"] << "/" << s1.cont_vizinhanca_total["swap_out"] << endl;
         outputFile << "Para = " << s1.cont_vizinhanca["para"] << "/" << s1.cont_vizinhanca_total["para"] << endl;
-
+        outputFile << "Realocate = " << s1.cont_vizinhanca["realocate"] << "/" << s1.cont_vizinhanca_total["realocate"] << endl;
         outputFile << "Contagem de Melhorias por rota" << endl;
         priority_queue<Caminho> rotas_prontas;
         while (!s0.rotas.empty())

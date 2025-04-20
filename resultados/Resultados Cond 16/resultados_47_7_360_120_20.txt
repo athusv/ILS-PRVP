@@ -1,0 +1,83 @@
+Tempo Máximo: 151200
+Seed: 1200002321 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_7_360_120_20.txt | Vértices: 47 | Veículos: 7
+Solução Construtivo - Score: 1643.33 | Custo: 32913.3
+Solução ILS - Score: 5361.33 | Custo: 101875
+Melhoria de 226.247%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 787/1775
+Swap Inter = 119/1517
+Swap Intra = 355/1437
+Swap Out = 364/1613
+Para = 125/1528
+Realocate = 460/1670
+Contagem de Melhorias por rota
+Rota 1= 161/1114
+Rota 3= 477/1871
+Rota 0= 661/2223
+Rota 5= 329/1528
+Rota 2= 143/1018
+Rota 4= 167/1129
+Rota 6= 627/2094
+Iterações totais: 20525
+***********************************************
+
+Tempo Máximo: 151200
+Seed: 2327365252 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_7_360_120_20.txt | Vértices: 47 | Veículos: 7
+Solução Construtivo - Score: 1450 | Custo: 31898.2
+Solução ILS - Score: 5346.33 | Custo: 100761
+Melhoria de 268.713%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 512/1427
+Swap Inter = 85/1281
+Swap Intra = 341/1209
+Swap Out = 238/1338
+Para = 79/1326
+Realocate = 412/1418
+Contagem de Melhorias por rota
+Rota 4= 53/827
+Rota 3= 51/821
+Rota 1= 61/813
+Rota 5= 290/1305
+Rota 0= 498/1827
+Rota 2= 682/2040
+Rota 6= 373/1575
+Iterações totais: 25231
+***********************************************
+
+Tempo Máximo: 151200
+Seed: 1069114927 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_7_360_120_20.txt | Vértices: 47 | Veículos: 7
+Solução Construtivo - Score: 1468 | Custo: 32510.3
+Solução ILS - Score: 5373.33 | Custo: 101530
+Melhoria de 266.031%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 646/1526
+Swap Inter = 128/1311
+Swap Intra = 362/1264
+Swap Out = 302/1392
+Para = 85/1293
+Realocate = 424/1418
+Contagem de Melhorias por rota
+Rota 6= 83/800
+Rota 4= 248/1187
+Rota 2= 593/1916
+Rota 5= 87/810
+Rota 1= 102/878
+Rota 3= 746/2258
+Rota 0= 450/1619
+Iterações totais: 25645
+***********************************************
+
+-- Seed da melhor execução: 1069114927
+-- Média de iterações: 8548
+-- Pontuação do Construtivo da melhor execução: 1468
+-- Média de pontuação ILS: 5360.33
+-- Melhor pontuação: 5373.33

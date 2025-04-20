@@ -1,0 +1,65 @@
+Tempo Máximo: 21600
+Seed: 1390302972 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_1_360_120_20.txt | Vértices: 47 | Veículos: 1
+Solução Construtivo - Score: 1582.67 | Custo: 21081.8
+Solução ILS - Score: 3164.33 | Custo: 21599
+Melhoria de 99.9368%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 409/482
+Swap Inter = 96/378
+Swap Intra = 0/0
+Swap Out = 287/414
+Para = 0/385
+Realocate = 299/429
+Contagem de Melhorias por rota
+Rota 0= 1091/2088
+Iterações totais: 14364
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 4052350249 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_1_360_120_20.txt | Vértices: 47 | Veículos: 1
+Solução Construtivo - Score: 1465 | Custo: 21505.8
+Solução ILS - Score: 3148 | Custo: 21596.3
+Melhoria de 114.881%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 692/799
+Swap Inter = 167/669
+Swap Intra = 0/0
+Swap Out = 520/744
+Para = 0/614
+Realocate = 556/794
+Contagem de Melhorias por rota
+Rota 0= 1935/3620
+Iterações totais: 13901
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 993732176 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 47_1_360_120_20.txt | Vértices: 47 | Veículos: 1
+Solução Construtivo - Score: 1215 | Custo: 21498.7
+Solução ILS - Score: 3152.67 | Custo: 21589.7
+Melhoria de 159.479%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 275/322
+Swap Inter = 81/295
+Swap Intra = 0/0
+Swap Out = 209/313
+Para = 0/260
+Realocate = 194/310
+Contagem de Melhorias por rota
+Rota 0= 759/1500
+Iterações totais: 14357
+***********************************************
+
+-- Seed da melhor execução: 1390302972
+-- Média de iterações: 4785
+-- Pontuação do Construtivo da melhor execução: 1582.67
+-- Média de pontuação ILS: 3155
+-- Melhor pontuação: 3164.33

@@ -1,0 +1,65 @@
+Tempo Máximo: 21600
+Seed: 2196650640 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 90min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 16_1_360_90_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 442 | Custo: 21329.8
+Solução ILS - Score: 674.333 | Custo: 21583.9
+Melhoria de 52.5641%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 186/238
+Swap Inter = 56/199
+Swap Intra = 0/0
+Swap Out = 116/219
+Para = 3/202
+Realocate = 168/247
+Contagem de Melhorias por rota
+Rota 0= 529/1105
+Iterações totais: 53598
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 3214548972 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 90min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 16_1_360_90_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 475.333 | Custo: 21188.6
+Solução ILS - Score: 674.333 | Custo: 21583.9
+Melhoria de 41.8654%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 194/228
+Swap Inter = 51/197
+Swap Intra = 0/0
+Swap Out = 118/198
+Para = 0/167
+Realocate = 178/235
+Contagem de Melhorias por rota
+Rota 0= 541/1025
+Iterações totais: 47591
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 916689189 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 90min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 16_1_360_90_20.txt | Vértices: 16 | Veículos: 1
+Solução Construtivo - Score: 491 | Custo: 21548.3
+Solução ILS - Score: 673.333 | Custo: 21596.1
+Melhoria de 37.1351%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 183/227
+Swap Inter = 32/193
+Swap Intra = 0/0
+Swap Out = 117/225
+Para = 3/191
+Realocate = 147/241
+Contagem de Melhorias por rota
+Rota 0= 482/1077
+Iterações totais: 52987
+***********************************************
+
+-- Seed da melhor execução: 3214548972
+-- Média de iterações: 17662
+-- Pontuação do Construtivo da melhor execução: 475.333
+-- Média de pontuação ILS: 674
+-- Melhor pontuação: 674.333

@@ -24,8 +24,7 @@ public:
     vector<pair<double, double> > push_hotspots; // Para tras e para frente.
 
     Caminho(int id, int t_prot, int t_parada);
-    void incert(vector<double> &best_insert, vector<map<double, int> > &visited_vertices, double &score_s,
-                double &custo_s);
+    void insert_v(vector<double> &best_insert, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);
     void excluir(vector<double> &exclui_vertice, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);
     void parar(vector<double> vertice_parar, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);
     void passar(vector<double> vertice_passa, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);

@@ -1,0 +1,68 @@
+Tempo Máximo: 43200
+Seed: 2215773163 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2232.33 | Custo: 42080.4
+Solução ILS - Score: 4192.33 | Custo: 43197.7
+Melhoria de 87.8005%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 865/1175
+Swap Inter = 97/889
+Swap Intra = 95/638
+Swap Out = 548/1069
+Para = 1/903
+Realocate = 435/998
+Contagem de Melhorias por rota
+Rota 1= 1108/3208
+Rota 0= 1028/3102
+Iterações totais: 7096
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 748588340 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2275 | Custo: 42235.9
+Solução ILS - Score: 4268.67 | Custo: 43192.2
+Melhoria de 87.6337%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 1459/1954
+Swap Inter = 194/1569
+Swap Intra = 239/1143
+Swap Out = 927/1798
+Para = 1/1515
+Realocate = 824/1707
+Contagem de Melhorias por rota
+Rota 1= 2540/6411
+Rota 0= 1343/4418
+Iterações totais: 6665
+***********************************************
+
+Tempo Máximo: 43200
+Seed: 868412106 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_2_360_120_20.txt | Vértices: 107 | Veículos: 2
+Solução Construtivo - Score: 2342.33 | Custo: 41982.7
+Solução ILS - Score: 4206.67 | Custo: 43196.1
+Melhoria de 79.593%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 600/806
+Swap Inter = 99/658
+Swap Intra = 111/495
+Swap Out = 380/710
+Para = 1/604
+Realocate = 368/744
+Contagem de Melhorias por rota
+Rota 1= 666/1981
+Rota 0= 1004/2531
+Iterações totais: 6474
+***********************************************
+
+-- Seed da melhor execução: 748588340
+-- Média de iterações: 2158
+-- Pontuação do Construtivo da melhor execução: 2275
+-- Média de pontuação ILS: 4222.56
+-- Melhor pontuação: 4268.67

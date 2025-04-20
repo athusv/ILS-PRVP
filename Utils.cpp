@@ -222,7 +222,7 @@ bool Utils::swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i)
                 swap[1][5] = (rota.plus_parada == grafo.t_parada) ? 1 : 0; // Indica se o vértice é uma parada
 
                 rota.excluir(swap[0], S.visited_vertices, S.score, S.custo);
-                rota.incert(swap[1], S.visited_vertices, S.score, S.custo);
+                rota.insert_v(swap[1], S.visited_vertices, S.score, S.custo);
                 return true;
                 // return swap;
             }

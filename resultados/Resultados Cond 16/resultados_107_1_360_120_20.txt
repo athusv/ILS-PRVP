@@ -1,0 +1,65 @@
+Tempo Máximo: 21600
+Seed: 3041797612 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_1_360_120_20.txt | Vértices: 107 | Veículos: 1
+Solução Construtivo - Score: 1231 | Custo: 21163.9
+Solução ILS - Score: 3129.67 | Custo: 21599
+Melhoria de 154.238%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 444/544
+Swap Inter = 64/422
+Swap Intra = 0/0
+Swap Out = 316/514
+Para = 0/403
+Realocate = 289/491
+Contagem de Melhorias por rota
+Rota 0= 1113/2374
+Iterações totais: 6241
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 107218311 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_1_360_120_20.txt | Vértices: 107 | Veículos: 1
+Solução Construtivo - Score: 1207 | Custo: 21035.8
+Solução ILS - Score: 3279.33 | Custo: 21598.1
+Melhoria de 171.693%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 403/484
+Swap Inter = 92/407
+Swap Intra = 0/0
+Swap Out = 293/452
+Para = 0/352
+Realocate = 257/430
+Contagem de Melhorias por rota
+Rota 0= 1045/2125
+Iterações totais: 7520
+***********************************************
+
+Tempo Máximo: 21600
+Seed: 920955961 | Tempo de Execução: 180s | Max Itereções sem melhora: 1000
+T_prot: 120min | T_parada: 15min | Velocidade: 20Km/h
+Instância: 107_1_360_120_20.txt | Vértices: 107 | Veículos: 1
+Solução Construtivo - Score: 1156.33 | Custo: 21423.7
+Solução ILS - Score: 3272 | Custo: 21591.6
+Melhoria de 182.963%
+
+Contagem Estruturas de Vizinhança: 
+Best Insert = 754/944
+Swap Inter = 166/758
+Swap Intra = 0/0
+Swap Out = 522/908
+Para = 0/757
+Realocate = 533/844
+Contagem de Melhorias por rota
+Rota 0= 1975/4211
+Iterações totais: 7312
+***********************************************
+
+-- Seed da melhor execução: 107218311
+-- Média de iterações: 2437
+-- Pontuação do Construtivo da melhor execução: 1207
+-- Média de pontuação ILS: 3227
+-- Melhor pontuação: 3279.33
