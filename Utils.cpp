@@ -52,8 +52,8 @@ std::vector<int> Utils::make_lista(Instance& grafo, Caminho& rota, std::vector<s
     std::vector<int> lista_de_candidatos;
     for (int i = 1; i < grafo.qt_vertices; i++) {
         if (visited_vertices[i].empty() || doubleLessOrEqual(visited_vertices[i].rbegin()->first, rota.custo)) {
-            double distancia_1 = grafo.distancia_matriz[rota.route.back()][i];
-            double distancia_2 = grafo.distancia_matriz[i][0];
+            double distancia_1 = rota.distancia_matriz[rota.route.back()][i];
+            double distancia_2 = rota.distancia_matriz[i][0];
             if (rota.custo + distancia_1 + distancia_2 + rota.plus_parada < grafo.t_max) {
                 lista_de_candidatos.push_back(i);
             }
@@ -65,9 +65,9 @@ std::vector<int> Utils::make_lista(Instance& grafo, Caminho& rota, std::vector<s
 std::vector<double> Utils::p_excluir(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, Caminho& rota, int i) {
     std::vector<double> exclui_vertice = {-1, -1, -1, -1};
     // cout << "p_excluir" << endl;
-    double dist1 = grafo.distancia_matriz[rota.route[i - 1]][rota.route[i]];
-    double dist2 = grafo.distancia_matriz[rota.route[i]][rota.route[i + 1]];
-    double dist3 = grafo.distancia_matriz[rota.route[i - 1]][rota.route[i + 1]];
+    double dist1 = rota.distancia_matriz[rota.route[i - 1]][rota.route[i]];
+    double dist2 = rota.distancia_matriz[rota.route[i]][rota.route[i + 1]];
+    double dist3 = rota.distancia_matriz[rota.route[i - 1]][rota.route[i + 1]];
 
     double impacto = dist3 - dist2 - dist1;
     if (rota.paradas[i] == 1)
@@ -118,8 +118,8 @@ bool Utils::swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i)
     proximo1 = rota.route[i + 1];
     score_v1 = (rota.paradas[i]) ? grafo.score_vertices[v1] : grafo.score_vertices[v1]/3;
 
-    dist1_remove_v1 = grafo.distancia_matriz[anterior1][v1]; // Arestas que serão removidas V1
-    dist2_remove_v1 = grafo.distancia_matriz[v1][proximo1];
+    dist1_remove_v1 = rota.distancia_matriz[anterior1][v1]; // Arestas que serão removidas V1
+    dist2_remove_v1 = rota.distancia_matriz[v1][proximo1];
     vertice_parada_v1 = (rota.paradas[i]) ? grafo.t_parada : 0; // Se tiver parada, plus de 15 minutos
     for (int n = 0; n < 2; n++)
     {
@@ -132,8 +132,8 @@ bool Utils::swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i)
 
             score_v2 = (rota.plus_parada == grafo.t_parada) ? grafo.score_vertices[v2] : grafo.score_vertices[v2] / 3;
 
-            dist1_add_v2 = grafo.distancia_matriz[anterior1][v2]; // Arestas que serão adicionadas
-            dist2_add_v2 = grafo.distancia_matriz[v2][proximo1];
+            dist1_add_v2 = rota.distancia_matriz[anterior1][v2]; // Arestas que serão adicionadas
+            dist2_add_v2 = rota.distancia_matriz[v2][proximo1];
 
             impacto1 = -dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1 + dist1_add_v2 + dist2_add_v2 + rota.plus_parada;
 
@@ -210,13 +210,13 @@ bool Utils::swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i)
                 // Dados do vértice removido da rota
                 swap[0][0] = v1; // ID do vértice v1 que será removido
                 swap[0][1] = score_v1; // Score do vértice
-                swap[0][2] = grafo.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1; // Alteração no custo total ao remover o vértice
+                swap[0][2] = rota.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1; // Alteração no custo total ao remover o vértice
                 swap[0][3] = i;// Posição do vértice na rota original
 
                 // Dados do vértice inserido na rota
                 swap[1][0] = v2;      // ID do vértice que será inserido
                 swap[1][1] = score_v2;// Score do vértice
-                swap[1][2] = dist1_add_v2 + dist2_add_v2 + rota.plus_parada - grafo.distancia_matriz[anterior1][proximo1]; // Alteração no custo total ao adicionar o vértice
+                swap[1][2] = dist1_add_v2 + dist2_add_v2 + rota.plus_parada - rota.distancia_matriz[anterior1][proximo1]; // Alteração no custo total ao adicionar o vértice
                 swap[1][3] = i;// Posição onde o vértice será inserido na rota
                 swap[1][4] = rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada; // Novo tempo de visita
                 swap[1][5] = (rota.plus_parada == grafo.t_parada) ? 1 : 0; // Indica se o vértice é uma parada
@@ -235,10 +235,10 @@ bool Utils::swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i)
 std::vector<double> Utils::p_insert(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, const Caminho& rota, int i, int vertice_insert) {
     std::vector<double> vert_incert = {-1, -1, -1, -1, -1, -1};
 
-    double dist1 = grafo.distancia_matriz[rota.route[i - 1]][vertice_insert];
-    double dist2 = grafo.distancia_matriz[vertice_insert][rota.route[i + 1]];
-    double dist3 = grafo.distancia_matriz[rota.route[i - 1]][rota.route[i]];
-    double dist4 = grafo.distancia_matriz[rota.route[i]][rota.route[i + 1]];
+    double dist1 = rota.distancia_matriz[rota.route[i - 1]][vertice_insert];
+    double dist2 = rota.distancia_matriz[vertice_insert][rota.route[i + 1]];
+    double dist3 = rota.distancia_matriz[rota.route[i - 1]][rota.route[i]];
+    double dist4 = rota.distancia_matriz[rota.route[i]][rota.route[i + 1]];
 
     int parada = (rota.paradas[i]) ? grafo.t_parada : 0;
     double impacto = dist1 + dist2 + grafo.t_parada - dist3 - dist4 - parada;

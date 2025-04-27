@@ -137,7 +137,7 @@ clean:
 # Executa o programa com os argumentos fornecidos
 run: $(TARGET)
             #   instancia     T_prot(min) / T_parada(min) / Velocidade(Km/h) 
-	./$(TARGET) 47_5_360_120_20.txt 120
+	./$(TARGET) 47_5_360_120_20_teste.txt 120
 	# ./$(TARGET) 16_1_360_120_20.txt
 
 	

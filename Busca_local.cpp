@@ -35,7 +35,10 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
         shuffle(operacoes.begin(), operacoes.end(), gen);
         for (const auto &operacao : operacoes)
         {
-            if (operacao == Operacao::Realocate)
+            if (operacao == Operacao::TwoOpt){
+                two_opt(grafo, S, rota, best_improvement);
+            }
+            else if (operacao == Operacao::Realocate)
             {
                 S.cont_vizinhanca_total["realocate"] += 1;
                 S.teste_rotas[rota.id] += 1;
@@ -165,6 +168,139 @@ Sol &Busca_local::busca_local(Instance &grafo, Sol &S, mt19937 &gen){
     return S;
 }
 
+bool Busca_local::two_opt(const Instance &grafo, Sol &S, Caminho &rota, bool &best)
+{
+    cout << "two_opt | Rota: " << rota.id << endl;
+    cout << "custo: " << rota.custo << endl;
+    cout << " antes rota: ";
+    cout << "Veiculo " << rota.id << " - Score: " << rota.score << " - Custo: " << rota.custo << " Rota: [";
+    for (int v = 0; v < rota.route.size(); v++)
+    {
+        cout << "[" << v << "]:";
+        if (rota.paradas[v] == true)
+        {
+            cout << "(*" << rota.route[v] << "*)"
+                 << ", ";
+        }
+        else if (v + 1 == rota.route.size())
+        {
+            cout << "(" << rota.route[v] << ")";
+        }
+        else
+        {
+            cout << "(" << rota.route[v] << ")"
+                 << ", ";
+        }
+    }
+    cout << "]";
+    cout << endl;
+    double best_custo = rota.custo;
+    double best_impacto = 0;
+    vector<double> best_impacto_vector;
+    vector<int> new_route; 
+    vector<bool> new_paradas;
+    int best_i, best_j;
+    for (int i = 1; i < rota.route.size() - 2; i++)
+    {
+        for (int j = i + 3; j < rota.route.size()-1; j++)
+        {
+            // Cálculo das distâncias removidas
+            double dist_remove1 = rota.distancia_matriz[rota.route[i]][rota.route[i + 1]];
+            double dist_remove2 = rota.distancia_matriz[rota.route[j]][rota.route[j + 1]];
+
+            // Cálculo das novas distâncias
+            double dist_add1 = rota.distancia_matriz[rota.route[i]][rota.route[j]];
+            double dist_add2 = rota.distancia_matriz[rota.route[i + 1]][rota.route[j + 1]];
+            vector<int> aux_rota = rota.route;
+            vector<bool> aux_paradas = rota.paradas;
+            vector<double> aux_impacto_vector;
+            reverse(aux_rota.begin() + i + 1, aux_rota.begin() + j+1);
+            reverse(aux_paradas.begin() + i + 1, aux_paradas.begin() + j+1);
+            double dist_remove; 
+            double dist_add;
+            double impacto = 0;
+            // cout << "Verificando impacto" << endl;
+            for (int k = i; k < j+1; k++){
+                // cout << "k: " << k << " - [k]: " << rota.route[k] << " - [k+1]: " << rota.route[k+1] << " - paradas[k]: " << rota.paradas[k] << " - paradas[k+1]: " << rota.paradas[k+1] << endl;
+                dist_remove = - rota.distancia_matriz[rota.route[k]][rota.route[k+1]] - rota.paradas[k+1] * grafo.t_parada;
+                // cout << "dist_remove: " << dist_remove << endl;
+
+                // cout << "k: " << k << " - [k]: " << aux_rota[k] << " - [k+1]: " << aux_rota[k + 1] << " - paradas[k]: " << aux_paradas[k] << " - paradas[k+1]: " << aux_paradas[k + 1] << endl;
+                dist_add = rota.distancia_matriz[aux_rota[k]][aux_rota[k+1]] + aux_paradas[k+1] * grafo.t_parada;
+                // cout << "dist_add: " << dist_add << endl;
+                impacto += dist_add + dist_remove;
+                aux_impacto_vector.push_back(impacto);
+            }
+            // cout << "impacto: " << impacto << endl;
+            // cout << "aux_impacto: " << aux_impacto_vector.size() << endl;
+            if(rota.custo + impacto >= best_custo){
+                continue;
+            }
+            
+            bool possibilidade_visita;
+            possibilidade_visita = (Utils::doubleGreaterOrEqual(rota.push_hotspots[j + 1].first, impacto * -1));
+            if(!possibilidade_visita){
+                continue;
+            }
+
+            if(possibilidade_visita){
+                best_custo = rota.custo + impacto;
+                best_i = i;
+                best_j = j;
+                new_route = aux_rota;
+                new_paradas = aux_paradas;
+                best_impacto = impacto;
+                best_impacto_vector = aux_impacto_vector;
+                break;
+            }
+
+            // i + 1=  j
+            // i + 2 = j - 1
+            // i + 3 = j - 2
+            // i + 4 = j - 3
+            // i + 5 = j - 4
+            // i + 6 = j - 5
+            // i + 7 = j - 6
+            // i + 8 = j - 7
+            // i + 9 = j - 8
+        }
+    }
+    cout << "best_custo: " << best_custo << endl;
+    cout << "best_i: " << best_i << " best_j: " << best_j << endl;
+    cout << "depois rota: ";
+    cout << "impacto: " << best_impacto << endl;
+    cout << "best_impacto_vector: ";
+    for(int i = 0; i < best_impacto_vector.size(); i++){
+        cout << best_impacto_vector[i] << " ";
+    }
+    cout << endl;
+    cout << "Veiculo " << rota.id << " - Score: " << rota.score << " - Custo: " << best_custo << " Rota: [";
+    for (int v = 0; v < new_route.size(); v++)
+    {
+        cout << "[" << v << "]:";
+        if (new_paradas[v] == true)
+        {
+            cout << "(*" << new_route[v] << "*)"
+                 << ", ";
+        }
+        else if (v + 1 == new_route.size())
+        {
+            cout << "(" << new_route[v] << ")";
+        }
+        else
+        {
+            cout << "(" << new_route[v] << ")"
+                 << ", ";
+        }
+    }
+    cout << "]";
+    cout << endl;
+    cout << endl <<"_________________________" <<endl;
+    rota.route = new_route;
+    rota.custo = best_custo;
+    return true;
+}
+
 bool Busca_local::realocate(const Instance &grafo, Sol &S, Caminho &rota, bool &best)
 {
     // cout << "Iniciando realocate" << endl;
@@ -189,9 +325,9 @@ bool Busca_local::realocate(const Instance &grafo, Sol &S, Caminho &rota, bool &
         int vertice = rota.route[i];
         int anterior = rota.route[i - 1];
         int proximo = rota.route[i + 1];
-        dist1_remove = grafo.distancia_matriz[anterior][vertice];
-        dist2_remove = grafo.distancia_matriz[vertice][proximo];
-        dist3_add = grafo.distancia_matriz[anterior][proximo];
+        dist1_remove = rota.distancia_matriz[anterior][vertice];
+        dist2_remove = rota.distancia_matriz[vertice][proximo];
+        dist3_add = rota.distancia_matriz[anterior][proximo];
         vertice_parada_v = (rota.paradas[i] == 1) ? grafo.t_parada : 0;
         impacto1 = -dist1_remove - dist2_remove - vertice_parada_v + dist3_add;
         score_v = (rota.paradas[i] == 1) ? grafo.score_vertices[vertice] : grafo.score_vertices[vertice] / 3;
@@ -207,9 +343,9 @@ bool Busca_local::realocate(const Instance &grafo, Sol &S, Caminho &rota, bool &
             int proximo2 = rota.route[j + 1];
             if (anterior2 == vertice || proximo2 == vertice)
                 continue;
-            dist1_add = grafo.distancia_matriz[anterior2][vertice];
-            dist2_add = grafo.distancia_matriz[vertice][proximo2];
-            dist3_remove = grafo.distancia_matriz[anterior2][proximo2];
+            dist1_add = rota.distancia_matriz[anterior2][vertice];
+            dist2_add = rota.distancia_matriz[vertice][proximo2];
+            dist3_remove = rota.distancia_matriz[anterior2][proximo2];
             impacto2 = dist1_add + dist2_add + vertice_parada_v - dist3_remove;
 
             if (rota.custo + impacto1 + impacto2 > grafo.t_max || impacto1 + impacto2 >= 0 || impacto1 + impacto2 >= best_realocate)
@@ -597,9 +733,9 @@ bool Busca_local::best_insert(const Instance &grafo, Sol &S, Caminho &rota, bool
                     continue;
                 }
 
-                dist1 = grafo.distancia_matriz[anterior][v];
-                dist2 = grafo.distancia_matriz[v][proximo];
-                dist3 = grafo.distancia_matriz[anterior][proximo];
+                dist1 = rota.distancia_matriz[anterior][v];
+                dist2 = rota.distancia_matriz[v][proximo];
+                dist3 = rota.distancia_matriz[anterior][proximo];
                 double impacto = dist1 + dist2 + rota.plus_parada - dist3;
 
                 if (rota.custo + impacto > grafo.t_max)
@@ -733,8 +869,8 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, Caminho &rota, bool 
         proximo1 = rota.route[i+1];
         score_v1 = (rota.paradas[i] == 1) ? grafo.score_vertices[rota.route[i]] : grafo.score_vertices[rota.route[i]]/3 ;
 
-        dist1_remove_v1 = grafo.distancia_matriz[anterior1][rota.route[i]]; // arestas que serão removidas V1
-        dist2_remove_v1 = grafo.distancia_matriz[rota.route[i]][proximo1];
+        dist1_remove_v1 = rota.distancia_matriz[anterior1][rota.route[i]]; // arestas que serão removidas V1
+        dist2_remove_v1 = rota.distancia_matriz[rota.route[i]][proximo1];
         vertice_parada_v1 = (rota.paradas[i] == 1) ? grafo.t_parada : 0; // se tiver parada, plus de 15 minutos
 
         for(int j = i+2;j <= rota.route.size()-2; j++){
@@ -746,31 +882,31 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, Caminho &rota, bool 
 
             vertice_parada_v2 = (rota.paradas[j] == 1) ? grafo.t_parada : 0;
 
-            dist1_remove_v2 = grafo.distancia_matriz[anterior2][rota.route[j]]; // arestas que serão removidas V2
-            dist2_remove_v2 = grafo.distancia_matriz[rota.route[j]][proximo2];
+            dist1_remove_v2 = rota.distancia_matriz[anterior2][rota.route[j]]; // arestas que serão removidas V2
+            dist2_remove_v2 = rota.distancia_matriz[rota.route[j]][proximo2];
 
             bool seguidos = (j == i+1);
             if(seguidos){
-                dist1_remove_v2 = grafo.distancia_matriz[anterior2][rota.route[j]]; // arestas que serão removidas V2
-                dist2_remove_v2 = grafo.distancia_matriz[rota.route[j]][proximo2];
+                dist1_remove_v2 = rota.distancia_matriz[anterior2][rota.route[j]]; // arestas que serão removidas V2
+                dist2_remove_v2 = rota.distancia_matriz[rota.route[j]][proximo2];
 
-                dist1_add_v1 = grafo.distancia_matriz[rota.route[j]][rota.route[i]];
-                dist2_add_v1 = grafo.distancia_matriz[rota.route[i]][proximo2];
+                dist1_add_v1 = rota.distancia_matriz[rota.route[j]][rota.route[i]];
+                dist2_add_v1 = rota.distancia_matriz[rota.route[i]][proximo2];
 
-                dist1_add_v2 = grafo.distancia_matriz[anterior1][rota.route[j]];
-                dist2_add_v2 = grafo.distancia_matriz[rota.route[j]][rota.route[i]];
+                dist1_add_v2 = rota.distancia_matriz[anterior1][rota.route[j]];
+                dist2_add_v2 = rota.distancia_matriz[rota.route[j]][rota.route[i]];
 
                 impacto1 = dist1_add_v1 + dist2_add_v1 + dist1_add_v2 - dist1_remove_v1 - dist2_remove_v1 - dist2_remove_v2;
                 impacto2 = 0;
             }else{
-                dist1_remove_v2 = grafo.distancia_matriz[anterior2][rota.route[j]]; // arestas que serão removidas V2
-                dist2_remove_v2 = grafo.distancia_matriz[rota.route[j]][proximo2];
+                dist1_remove_v2 = rota.distancia_matriz[anterior2][rota.route[j]]; // arestas que serão removidas V2
+                dist2_remove_v2 = rota.distancia_matriz[rota.route[j]][proximo2];
                 
-                dist1_add_v1 = grafo.distancia_matriz[anterior2][rota.route[i]]; // arestas adicionadas v1
-                dist2_add_v1 = grafo.distancia_matriz[rota.route[i]][proximo2];
+                dist1_add_v1 = rota.distancia_matriz[anterior2][rota.route[i]]; // arestas adicionadas v1
+                dist2_add_v1 = rota.distancia_matriz[rota.route[i]][proximo2];
 
-                dist1_add_v2 = grafo.distancia_matriz[anterior1][rota.route[j]]; // arestas adicionadas V2
-                dist2_add_v2 = grafo.distancia_matriz[rota.route[j]][proximo1];
+                dist1_add_v2 = rota.distancia_matriz[anterior1][rota.route[j]]; // arestas adicionadas V2
+                dist2_add_v2 = rota.distancia_matriz[rota.route[j]][proximo1];
 
                 impacto1 = - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1 + dist1_add_v2 + dist2_add_v2 + vertice_parada_v2;
                 impacto2 = - dist1_remove_v2 - dist2_remove_v2 - vertice_parada_v2 + dist1_add_v1 + dist2_add_v1 + vertice_parada_v1;
@@ -964,20 +1100,20 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, Caminho &rota, bool 
                 // exclui vertice i rota1
                 swap_inter[0][0] = rota.route[i];
                 swap_inter[0][1] = score_v1;
-                swap_inter[0][2] = grafo.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1;
+                swap_inter[0][2] = rota.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1;
                 swap_inter[0][3] = i;
 
                 // exclui vertice j rota2   
                 swap_inter[1][0] = rota.route[j];
                 swap_inter[1][1] = score_v2;
-                swap_inter[1][2] = grafo.distancia_matriz[anterior2][proximo2] - dist1_remove_v2 - dist2_remove_v2 - vertice_parada_v2;
+                swap_inter[1][2] = rota.distancia_matriz[anterior2][proximo2] - dist1_remove_v2 - dist2_remove_v2 - vertice_parada_v2;
                 swap_inter[1][3] = j;
 
                 
                 //adicionar vertice j na rota1
                 swap_inter[2][0] = rota.route[j];                                 // id vertice
                 swap_inter[2][1] = score_v2; // score vertice
-                swap_inter[2][2] = dist1_add_v2 + dist2_add_v2 + vertice_parada_v2 - grafo.distancia_matriz[anterior1][proximo1]; // impacto insert_v vertice
+                swap_inter[2][2] = dist1_add_v2 + dist2_add_v2 + vertice_parada_v2 - rota.distancia_matriz[anterior1][proximo1]; // impacto insert_v vertice
                 swap_inter[2][3] = i;                             // Local insert rota
                 swap_inter[2][4] = rota.visita_custo[i - 1] + dist1_add_v2 + vertice_parada_v2; // Visita_custo
                 swap_inter[2][5] = (vertice_parada_v2 == grafo.t_parada) ? 1 : 0;
@@ -985,7 +1121,7 @@ bool Busca_local::swap_inter_rotas(Instance &grafo, Sol &S, Caminho &rota, bool 
                 // adicionar vertice i na rota2
                 swap_inter[3][0] = rota.route[i];                                                                // id vertice
                 swap_inter[3][1] = score_v1; // score vertice
-                swap_inter[3][2] = dist1_add_v1 + dist2_add_v1 + vertice_parada_v1 - grafo.distancia_matriz[anterior2][proximo2]; // impacto insert_v vertice
+                swap_inter[3][2] = dist1_add_v1 + dist2_add_v1 + vertice_parada_v1 - rota.distancia_matriz[anterior2][proximo2]; // impacto insert_v vertice
                 swap_inter[3][3] = j;                                                            // Local insert rota
                 swap_inter[3][4] = rota.visita_custo[j - 1] + dist1_add_v1 + vertice_parada_v1 + impacto1; // Visita_custo
                 swap_inter[3][5] = (vertice_parada_v1 == grafo.t_parada) ? 1 : 0;
@@ -1060,8 +1196,8 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, Caminho &rota1, Cami
         proximo1 = rota1.route[i + 1];
         score_r1 = (rota1.paradas[i] == 1) ? grafo.score_vertices[rota1.route[i]] : grafo.score_vertices[rota1.route[i]]/3;
 
-        dist1_remove_r1 = grafo.distancia_matriz[anterior1][rota1.route[i]]; // arestas que serão removidas da rota 1
-        dist2_remove_r1 = grafo.distancia_matriz[rota1.route[i]][proximo1];
+        dist1_remove_r1 = rota1.distancia_matriz[anterior1][rota1.route[i]]; // arestas que serão removidas da rota 1
+        dist2_remove_r1 = rota1.distancia_matriz[rota1.route[i]][proximo1];
         vertice_parada_r1 = (rota1.paradas[i] == 1) ? grafo.t_parada : 0; // se tiver parada, plus de 15 minutos
         // cout << "**** Rota: "<<rota1.id<<" - Vertice[" << i << "] = "<< rota1.route[i] <<" | "<< i <<" de " << rota1.route.size()-1<<" ****"<<endl;
         for (int j = 1; j < rota2.route.size()-1; j++){ 
@@ -1077,14 +1213,14 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, Caminho &rota1, Cami
 
             vertice_parada_r2 = (rota2.paradas[j] == 1) ? grafo.t_parada : 0; // se tiver parada, plus de 15 minutos
 
-            dist3_remove_r2 = grafo.distancia_matriz[anterior2][rota2.route[j]]; // arestas que serão removidas da rota 1
-            dist4_remove_r2 = grafo.distancia_matriz[rota2.route[j]][proximo2];
+            dist3_remove_r2 = rota2.distancia_matriz[anterior2][rota2.route[j]]; // arestas que serão removidas da rota 2
+            dist4_remove_r2 = rota2.distancia_matriz[rota2.route[j]][proximo2];
 
-            dist1_add_r1 = grafo.distancia_matriz[anterior1][rota2.route[j]]; // arestas adicionadas na rota1
-            dist2_add_r1 = grafo.distancia_matriz[rota2.route[j]][proximo1];
+            dist1_add_r1 = rota1.distancia_matriz[anterior1][rota2.route[j]]; // arestas adicionadas na rota1
+            dist2_add_r1 = rota1.distancia_matriz[rota2.route[j]][proximo1];
 
-            dist3_add_r2 = grafo.distancia_matriz[anterior2][rota1.route[i]]; // arestas adicionadas na rota2
-            dist4_add_r2 = grafo.distancia_matriz[rota1.route[i]][proximo2];
+            dist3_add_r2 = rota2.distancia_matriz[anterior2][rota1.route[i]]; // arestas adicionadas na rota2
+            dist4_add_r2 = rota2.distancia_matriz[rota1.route[i]][proximo2];
 
             impacto1 = dist1_add_r1 + dist2_add_r1 + vertice_parada_r2 - dist1_remove_r1 - dist2_remove_r1 - vertice_parada_r1;
             impacto2 = dist3_add_r2 + dist4_add_r2 + vertice_parada_r1 - dist3_remove_r2 - dist4_remove_r2 - vertice_parada_r2;
@@ -1284,20 +1420,20 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, Caminho &rota1, Cami
                 // exclui vertice i rota1
                 swap_intra[0][0] = rota1.route[i];
                 swap_intra[0][1] = score_r1;
-                swap_intra[0][2] = grafo.distancia_matriz[anterior1][proximo1] - dist1_remove_r1 - dist2_remove_r1 - vertice_parada_r1;
+                swap_intra[0][2] = rota1.distancia_matriz[anterior1][proximo1] - dist1_remove_r1 - dist2_remove_r1 - vertice_parada_r1;
                 swap_intra[0][3] = i;
 
                 // exclui vertice j rota2
                 swap_intra[1][0] = rota2.route[j];
                 swap_intra[1][1] = score_r2;
-                swap_intra[1][2] = grafo.distancia_matriz[anterior2][proximo2] - dist3_remove_r2 - dist4_remove_r2 - vertice_parada_r2;
+                swap_intra[1][2] = rota2.distancia_matriz[anterior2][proximo2] - dist3_remove_r2 - dist4_remove_r2 - vertice_parada_r2;
                 swap_intra[1][3] = j;
 
                 
                 //adicionar vertice j na rota1
                 swap_intra[2][0] = rota2.route[j];                                 // id vertice
                 swap_intra[2][1] = score_r2; // score vertice
-                swap_intra[2][2] = dist1_add_r1 + dist2_add_r1 + vertice_parada_r2 - grafo.distancia_matriz[anterior1][proximo1]; // impacto insert_v vertice
+                swap_intra[2][2] = dist1_add_r1 + dist2_add_r1 + vertice_parada_r2 - rota1.distancia_matriz[anterior1][proximo1]; // impacto insert_v vertice
                 swap_intra[2][3] = i;                             // Local insert rota
                 swap_intra[2][4] = rota1.visita_custo[i - 1] + dist1_add_r1 + vertice_parada_r2; // Visita_custo
                 swap_intra[2][5] = (vertice_parada_r2 == grafo.t_parada) ? 1 : 0;
@@ -1305,7 +1441,7 @@ bool Busca_local::swap_intra_rotas(Instance &grafo, Sol &S, Caminho &rota1, Cami
                 // adicionar vertice i na rota2
                 swap_intra[3][0] = rota1.route[i];                                                                // id vertice
                 swap_intra[3][1] = score_r1; // score vertice
-                swap_intra[3][2] = dist3_add_r2 + dist4_add_r2 + vertice_parada_r1 - grafo.distancia_matriz[anterior2][proximo2]; // impacto insert_v vertice
+                swap_intra[3][2] = dist3_add_r2 + dist4_add_r2 + vertice_parada_r1 - rota2.distancia_matriz[anterior2][proximo2]; // impacto insert_v vertice
                 swap_intra[3][3] = j;                                                            // Local insert rota
                 swap_intra[3][4] = rota2.visita_custo[j - 1] + dist3_add_r2 + vertice_parada_r1; // Visita_custo
                 swap_intra[3][5] = (vertice_parada_r1 == grafo.t_parada) ? 1 : 0;
@@ -1378,8 +1514,8 @@ bool Busca_local::swap_Out_rotas(Instance &grafo, Sol &S, Caminho &rota, int i_i
         proximo1 = rota.route[i + 1];
         score_v1 = (rota.paradas[i]) ? grafo.score_vertices[v1] : grafo.score_vertices[v1]/3;
 
-        dist1_remove_v1 = grafo.distancia_matriz[anterior1][v1]; // Arestas que serão removidas V1
-        dist2_remove_v1 = grafo.distancia_matriz[v1][proximo1];
+        dist1_remove_v1 = rota.distancia_matriz[anterior1][v1]; // Arestas que serão removidas V1
+        dist2_remove_v1 = rota.distancia_matriz[v1][proximo1];
         vertice_parada_v1 = (rota.paradas[i]) ? grafo.t_parada : 0; // Se tiver parada, plus de 15 minutos
 
         for (int n = 0; n < 2; n++)
@@ -1394,8 +1530,8 @@ bool Busca_local::swap_Out_rotas(Instance &grafo, Sol &S, Caminho &rota, int i_i
 
                 if(best_swap >= -score_v1 + score_v2 || rota.score-score_v1+score_v2 <= rota.score ) continue; //ja tem a melhor swap 
 
-                dist1_add_v2 = grafo.distancia_matriz[anterior1][v2]; // Arestas que serão adicionadas
-                dist2_add_v2 = grafo.distancia_matriz[v2][proximo1];
+                dist1_add_v2 = rota.distancia_matriz[anterior1][v2]; // Arestas que serão adicionadas
+                dist2_add_v2 = rota.distancia_matriz[v2][proximo1];
 
                 impacto1 = -dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1 + dist1_add_v2 + dist2_add_v2 + rota.plus_parada;
 
@@ -1475,13 +1611,13 @@ bool Busca_local::swap_Out_rotas(Instance &grafo, Sol &S, Caminho &rota, int i_i
                     // Dados do vértice removido da rota
                     swap_out[0][0] = v1; // ID do vértice v1 que será removido
                     swap_out[0][1] = score_v1; // Score do vértice
-                    swap_out[0][2] = grafo.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1; // Alteração no custo total ao remover o vértice
+                    swap_out[0][2] = rota.distancia_matriz[anterior1][proximo1] - dist1_remove_v1 - dist2_remove_v1 - vertice_parada_v1; // Alteração no custo total ao remover o vértice
                     swap_out[0][3] = i;// Posição do vértice na rota original
 
                     // Dados do vértice inserido na rota
                     swap_out[1][0] = v2; // ID do vértice que será inserido
                     swap_out[1][1] = score_v2;// Score do vértice
-                    swap_out[1][2] = dist1_add_v2 + dist2_add_v2 + rota.plus_parada - grafo.distancia_matriz[anterior1][proximo1]; // Alteração no custo total ao adicionar o vértice
+                    swap_out[1][2] = dist1_add_v2 + dist2_add_v2 + rota.plus_parada - rota.distancia_matriz[anterior1][proximo1]; // Alteração no custo total ao adicionar o vértice
                     swap_out[1][3] = i; // Posição onde o vértice será inserido na rota
                     swap_out[1][4] = rota.visita_custo[i - 1] + dist1_add_v2 + rota.plus_parada; // Novo tempo de visita 
                     swap_out[1][5] = (rota.plus_parada == grafo.t_parada) ? 1 : 0; // Indica se o vértice é uma parada

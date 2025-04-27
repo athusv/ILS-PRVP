@@ -5,19 +5,25 @@
 using namespace std;
 
 Sol::Sol(const Instance &grafo) {
+    // cout << "Iniciando a construção do objeto Sol..." << endl;
     visited_vertices.resize(grafo.qt_vertices);
+    // cout << "Tamanho de visited_vertices ajustado para: " << grafo.qt_vertices << endl;
 
-    // Todos ja visitaram o vertice 0(inicio)
-    for (int i = 0; i < grafo.veiculos; i++) {
-        Caminho aux_rota(i, grafo.t_prot, grafo.t_parada);
-        aux_rota.route.push_back(0);
-        aux_rota.paradas.push_back(0);
-        aux_rota.visita_custo.push_back(0);
-        aux_rota.push_hotspots.push_back({999, 999});
-        rotas.push(aux_rota);
-        improved_rotas[i] = 0;
-        teste_rotas[i] = 0;
+    // Todos já visitaram o vértice 0 (início)
+    int id = 0;
+    // cout << "Inicializando rotas para cada tipo de veículo..." << endl;
+    for (int i = 0; i < grafo.tipo_veiculo.size(); i++) {
+        // cout << "Tipo de veículo " << i << " com " << grafo.tipo_veiculo[i] << " unidades." << endl;
+        for (int j = 0; j < grafo.tipo_veiculo[i]; j++) {
+            id++;
+            Caminho aux_rota(id, grafo.t_prot, grafo.t_parada, i, grafo.velocidade[i], grafo);
+            rotas.push(aux_rota);
+            // cout << "Rota adicionada para veículo do tipo " << i << ", unidade " << j << "." << endl;
+            improved_rotas[i] = 0;
+            teste_rotas[i] = 0;
+        }
     }
+    // cout << "Construção do objeto Sol concluída." << endl;
 }
 
 void Sol::print_visited(int inicio, int final) const{
@@ -118,7 +124,7 @@ bool Sol::checa_custo(Instance &grafo, string &chamou) {
         rotasCopy.pop();
         double aux_custo = 0;
         for (int i = 1; i < rota.route.size(); i++) {
-            aux_custo += grafo.distancia_matriz[rota.route[i - 1]][rota.route[i]];
+            aux_custo += rota.distancia_matriz[rota.route[i - 1]][rota.route[i]];
             if (rota.paradas[i] == 1) {
                 aux_custo += grafo.t_parada;
             }
@@ -198,7 +204,7 @@ bool Sol::checa_visita_custo(Instance &grafo, string &chamou){
         double aux_visita_custo = 0;
         for(int i = 1 ; i < rota.route.size()-1; i++){
             int plus_parada = (rota.paradas[i]) ? grafo.t_parada : 0;
-            aux_visita_custo+=grafo.distancia_matriz[rota.route[i-1]][rota.route[i]] + plus_parada;
+            aux_visita_custo+=rota.distancia_matriz[rota.route[i-1]][rota.route[i]] + plus_parada;
             if(!Utils::doubleEquals(aux_visita_custo, rota.visita_custo[i])){
                 cout << chamou << endl;
                 cout << "Rota: " << rota.id << " - Vertice[" << i << "] = " << rota.route[i]<<endl;

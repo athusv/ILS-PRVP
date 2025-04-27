@@ -13,12 +13,13 @@ public:
     long long int iteracoes_totais;
     int qt_vertices;
     int veiculos;
+    vector<int> tipo_veiculo;
     double t_max;
     int t_prot;
     int t_parada;
-    int velocidade;
+    vector<int> velocidade;
     vector<double> score_vertices;
-    vector<vector<double> > distancia_matriz;
+    vector<vector<double> > distancia_metros;
 
     Instance(const string &filename);
     friend ostream &operator<<(ostream &os, const Instance &instance);

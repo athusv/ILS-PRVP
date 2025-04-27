@@ -19,6 +19,7 @@ private:
     static bool swap_inter_rotas(Instance &grafo, Sol &S, Caminho &rota, bool &best);
     static bool para(const Instance &grafo, Sol &S, Caminho &rota, bool &best);
     static bool realocate(const Instance &grafo, Sol &S, Caminho &rota, bool &best);
+    static bool two_opt(const Instance &grafo, Sol &S, Caminho &rota, bool &best);
     static bool swap_paradas_inter_rota(Instance &grafo, Sol &S, Caminho &rota, std::tuple<int, int, int, double, double> &best_swap_info);
     bool efetuar_melhor_troca(Instance &grafo, Sol &S, Caminho &rota, std::tuple<int, int, int, double, double> &best_swap_info, int &score_s, double &custo_s);
 };

@@ -6,7 +6,7 @@
 #include <map>
 #include <utility>
 #include <algorithm>
-
+#include "Instance.h"
 using namespace std;
 
 class Caminho {
@@ -18,12 +18,15 @@ public:
     int plus_parada;
     int t_prot;
     int t_parada;
+    int tipo_veiculo;
+    int velocidade;
+    vector<vector<double> > distancia_matriz;
     vector<int> route; // Id dos vertices da rota
     vector<bool> paradas; // Se Para ou Passa
     vector<double> visita_custo; // Custo de quando o vertice foi visitado
     vector<pair<double, double> > push_hotspots; // Para tras e para frente.
 
-    Caminho(int id, int t_prot, int t_parada);
+    Caminho(int id, int t_prot, int t_parada, int tipo_veiculo, int velocidade, const Instance &grafo);
     void insert_v(vector<double> &best_insert, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);
     void excluir(vector<double> &exclui_vertice, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);
     void parar(vector<double> vertice_parar, vector<map<double, int> > &visited_vertices, double &score_s, double &custo_s);

@@ -1,10 +1,37 @@
 #include "Caminho.h"
 #include "Utils.h"
 
-Caminho::Caminho(int id, int t_prot, int t_parada) {
+Caminho::Caminho(int id, int t_prot, int t_parada, int tipo_veiculo, int velocidade, const Instance &grafo) {
+    // cout << "Iniciando a construção do objeto Caminho..." << endl;
     this->id = id;
     this->t_prot = t_prot;
     this->t_parada = t_parada;
+    this->tipo_veiculo = tipo_veiculo;
+    this->velocidade = velocidade;
+
+    // cout << "ID: " << id << ", Tipo de Veículo: " << tipo_veiculo << ", Velocidade: " << velocidade << " km/h" << endl;
+    // cout << "Tempo de Proteção: " << t_prot << ", Tempo de Parada: " << t_parada << endl;
+
+    route.push_back(0);
+    paradas.push_back(0);
+    visita_custo.push_back(0);
+    push_hotspots.push_back({999, 999});
+
+
+    // cout << "Inicializando matriz de distâncias..." << endl;
+    distancia_matriz.resize(grafo.qt_vertices, vector<double>(grafo.qt_vertices, 0));
+    double metros_p_segundo = velocidade / 3.6;
+    for (int i = 0; i < grafo.qt_vertices; i++)
+    {
+        for (int j = 0; j < grafo.qt_vertices; j++)
+        {
+            distancia_matriz[i][j] = grafo.distancia_metros[i][j] / metros_p_segundo;
+            // if (i == 0 && j < 5) { // Exemplo: imprime as primeiras 5 distâncias da primeira linha
+            //     cout << "Distância ajustada de " << i << " para " << j << ": " << distancia_matriz[i][j] << " segundos" << endl;
+            // }
+        }
+    }
+    // cout << "Construção do objeto Caminho concluída." << endl;
 }
 
 void Caminho::insert_v(vector<double> &best_insert, vector<map<double, int>> &visited_vertices, double &score_s, double &custo_s)
@@ -134,7 +161,7 @@ void Caminho::print_push() {
 }
 
 ostream &operator<<(ostream &os, const Caminho &caminho) {
-    os << "Veiculo " << caminho.id << " - Score: " << caminho.score << " - Custo: " << caminho.custo << " Rota: [";
+    os <<endl<< "Veiculo " << caminho.id << " - Score: " << caminho.score << " - Custo: " << caminho.custo << " - Velocidade: " << caminho.velocidade << "km/h Rota: [";
     for (int v = 0; v < caminho.route.size(); v++) {
         os << "[" << v<<"]:";
         if (caminho.paradas[v] == true) {

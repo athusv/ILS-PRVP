@@ -23,25 +23,6 @@
 
 using namespace std;
 
-template<typename T>
-priority_queue<T> join_priority_queues(priority_queue<T> q1, priority_queue<T> q2) {
-    priority_queue<T> result; // Nova lista de prioridade
-
-    // Popule a nova lista com os elementos de q1
-    while (!q1.empty()) {
-        result.push(q1.top());
-        q1.pop();
-    }
-
-    // Popule a nova lista com os elementos de q2
-    while (!q2.empty()) {
-        result.push(q2.top());
-        q2.pop();
-    }
-
-    return result;
-}
-
 void Guloso(Instance &grafo, Sol &s0, mt19937 &gen)
 {
     // Variavel de parada do while, todas as rotas estao prontas
@@ -61,7 +42,7 @@ void Guloso(Instance &grafo, Sol &s0, mt19937 &gen)
 
         vector<int> lista_candidatos = Utils::make_lista(grafo, rota, s0.visited_vertices);
         if (lista_candidatos.size() == 0) {
-            rota.custo += grafo.distancia_matriz[rota.route.back()][0];
+            rota.custo += rota.distancia_matriz[rota.route.back()][0];
             rota.route.push_back(0);
             rota.paradas.push_back(0);
             rota.visita_custo.push_back(rota.custo);
@@ -84,7 +65,7 @@ void Guloso(Instance &grafo, Sol &s0, mt19937 &gen)
 
         int index_max = Utils::max_score(lista_candidatos, grafo.score_vertices);
 
-        rota.custo += grafo.distancia_matriz[rota.route.back()][index_max] + rota.plus_parada;
+        rota.custo += rota.distancia_matriz[rota.route.back()][index_max] + rota.plus_parada;
         double s = grafo.score_vertices[index_max];
 
         if (rota.plus_parada == grafo.t_parada)
@@ -124,23 +105,27 @@ void Guloso(Instance &grafo, Sol &s0, mt19937 &gen)
 
 void Construtivo(Instance &grafo, Sol &s0, mt19937 &gen)
 {
-    // Variavel de parada do while, todas as rotas estao prontas
+    // cout << "Iniciando o método Construtivo..." << endl;
     priority_queue<Caminho> rotas_prontas;
     while (!s0.rotas.empty())
     {
         Caminho rota = s0.rotas.top();
         s0.rotas.pop();
+        // cout << "Processando rota com ID: " << rota.id << endl;
 
-        // decidindo se vai parar ou passar
+        // Decidindo se vai parar ou passar
         std::uniform_int_distribution<int> dis(1, 10);
         int rand_num = dis(gen);
         rota.plus_parada = (rand_num <= 7) ? grafo.t_parada : 0;
+        // cout << "Decisão de parada: " << (rota.plus_parada ? "Parar" : "Não parar") << endl;
 
         // Lista de vertices possiveis
         vector<int> lista_candidatos = Utils::make_lista(grafo, rota, s0.visited_vertices);
+        // cout << "Número de candidatos: " << lista_candidatos.size() << endl;
         if (lista_candidatos.empty())
         {
-            rota.custo += grafo.distancia_matriz[rota.route.back()][0];
+            // cout << "Nenhum candidato disponível, finalizando rota." << endl;
+            rota.custo += rota.distancia_matriz[rota.route.back()][0];
             rota.route.push_back(0);
             rota.paradas.push_back(0);
             rota.visita_custo.push_back(rota.custo);
@@ -150,39 +135,29 @@ void Construtivo(Instance &grafo, Sol &s0, mt19937 &gen)
             rotas_prontas.push(rota);
             s0.custo += rota.custo;
             s0.score += rota.score;
-            // rota.print_push();
             continue;
         }
-        // - (20%) Aleatório,
-        // - (20%) menor custo,
-        // - (20%) maior pontuação,
-        // - (40%) melhor custo-benefício (pontuação/tempo).
-        // cout << "aleatorio: " << rand_num << endl;
+
         int index; string chamou;
         rand_num = dis(gen);
-        // cout << "rand_num: "<<rand_num<<endl;
+        // cout << "rand_num: " << rand_num << endl;
         if(rand_num >=1 && rand_num < 3){
             shuffle(lista_candidatos.begin(), lista_candidatos.end(), gen);
             index = lista_candidatos[0];
-            // cout << "Random: " << index << endl;
             chamou = "Construtivo - Random";
         }else if(rand_num >= 3 && rand_num < 5){
-            // cout << rota <<endl<<rota.route.back()<<endl;
-            index = Utils::min_custo(lista_candidatos, grafo.distancia_matriz, rota.route.back());
-            // cout << "Min_custo: " << index << endl;
+            index = Utils::min_custo(lista_candidatos, rota.distancia_matriz, rota.route.back());
             chamou = "Construtivo - Min_custo";
         }else if(rand_num >= 5 && rand_num < 7){
             index = Utils::max_score(lista_candidatos, grafo.score_vertices);
-            // cout << "Max_score: " << index << endl;
             chamou = "Construtivo - Max_scores";
         }else if(rand_num >= 7 && rand_num <=10){
-            index = Utils::cost_benefit(lista_candidatos, grafo.score_vertices, grafo.distancia_matriz, rota.route.back());
-            // cout << "Cost_benefit: " << index << endl;
+            index = Utils::cost_benefit(lista_candidatos, grafo.score_vertices, rota.distancia_matriz, rota.route.back());
             chamou = "Construtivo - Cost_benefit";
         }
+        // cout << "Escolha do candidato: " << index << " usando método: " << chamou << endl;
 
-
-        rota.custo += grafo.distancia_matriz[rota.route.back()][index] + rota.plus_parada;
+        rota.custo += rota.distancia_matriz[rota.route.back()][index] + rota.plus_parada;
         double s = grafo.score_vertices[index];
 
         if (rota.plus_parada == grafo.t_parada)
@@ -272,31 +247,25 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
     auto inicio = std::chrono::high_resolution_clock::now();
     grafo.iteracoes_totais = 0;
     int it_sem_melhora = 0;
-    // cout << "ah" << endl;
+    // cout << "[ILS_Reset] Iniciando algoritmo ILS com Reset" << endl;
+
     while (true)
     {
         double porcentagem_perturbacao = static_cast<double>(it_sem_melhora) / max_it_sem_melhora;
-        // cout << "Iteraçao sem melhora: " << it_sem_melhora << " || Max iteraçao: " << max_it_sem_melhora << endl;
+
         s1 = s;
-        // s1 = Perturbacao::perturbacao(grafo, s1, gen);
         s1 = Perturbacao::perturbacao_strength(grafo, s1, gen, porcentagem_perturbacao);
         s1.atualiza_push(grafo);
         chamou = "Pertubação";
         s1.checa_solucao(grafo, chamou);
-        // cout << "|||||||||||Pertubação " << it_total << endl;
-        // cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
 
         s1 = Busca_local::busca_local(grafo, s1, gen);
         s1.atualiza_push(grafo);
         chamou = "Busca Local";
         s1.checa_solucao(grafo, chamou);
-        // cout << "||||||||||||Busca Local " << it_total << endl;
-        // cout << "Score: " << s1.score << ", Custo: " << s1.custo << endl;
 
         if (!Utils::doubleGreaterOrEqual(best_s.score, s1.score))
         {
-            // cout << "Melhor solucão Local " << it_sem_melhora << endl;
-            // cout << "Score: " << s1.score << endl;
             best_s = s1;
             s = best_s;
             it_sem_melhora = 0; // Reset ao encontrar uma melhora
@@ -306,22 +275,15 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
             it_sem_melhora++;
         }
 
-        // Reinicia se não houver melhora após 50 iterações
         if (it_sem_melhora >= max_it_sem_melhora)
         {
-            // std::cout << "Reiniciando com Construtivo após " << max_it_sem_melhora << " iterações sem melhora.\n";
             if(best_global.score < best_s.score){
                 best_global = best_s;
-                // cout <<endl<< "***** Melhor solucão Global ***** "<< endl;
-                // cout << "Score: " << best_global.score <<endl<<endl;
             }
             Sol s2(grafo);
             Construtivo(grafo, s2, gen);
             best_s = s2;
             s = best_s;
-
-            // cout <<endl<< "Novo Construtivo:" << endl;
-            // cout << "Score: " << s.score << endl;
             it_sem_melhora = 0;
         }
 
@@ -331,16 +293,12 @@ Sol ILS_Reset(Sol &s0, Instance &grafo, mt19937 gen, double tempo_maximo, int ma
 
         if (duracao.count() >= tempo_maximo)
         {
-            // std::cout << "Tempo máximo de execução atingido: " << duracao.count() << " segundos.\n";
             if(best_global.score < best_s.score){
                 best_global = best_s;
-                // cout <<endl<< "***** Melhor solucão Global ***** "<< endl;
-                // cout << "Score: " << best_global.score <<endl<<endl;
             }
-            // std::cout << "Iteração: " << it_total << "\n";
             break;
         }
-        // cout << "ah" << endl;
+
         grafo.iteracoes_totais++;
     }
 
@@ -389,16 +347,16 @@ int main(int argc, char *argv[])
 
         random_device rd;
         seed_value = rd();
-        // cout << "Iteração: "<<n<<" | Seed: "<<seed_value<<endl;
         mt19937 gen(seed_value);
-        // Solução inicial
         Sol s0(grafo);
+        cout << s0 << endl;
+        cout << "Construtivo" << endl;
         Construtivo(grafo, s0, gen);
+        cout << s0 << endl;
         s0.atualiza_push(grafo);
         string chamou = "Construtivo";
-        // s0.checa_solucao(grafo, chamou);
+        s0.checa_solucao(grafo, chamou);
 
-        // cout<<"Iteração: "<<n<<endl;
         Sol s1 = ILS_Reset(s0, grafo, gen, tempo_maximo, max_it_sem_melhora);
         mean_score += s1.score;
         if (best_s.score < s1.score)
@@ -411,7 +369,7 @@ int main(int argc, char *argv[])
 
         outputFile << "Tempo Máximo: " << grafo.t_max * grafo.veiculos << std::endl;
         outputFile << "Seed: " << seed_value << " | Tempo de Execução: " << tempo_maximo << "s | Max Itereções sem melhora: " << max_it_sem_melhora << endl;
-        outputFile << "T_prot: " << grafo.t_prot / 60 << "min | T_parada: " << grafo.t_parada / 60 << "min | Velocidade: " << grafo.velocidade << "Km/h" << endl;
+        outputFile << "T_prot: " << grafo.t_prot / 60 << "min | T_parada: " << grafo.t_parada / 60 << "min | Velocidade: " << "Km/h" << endl;
         outputFile << "Instância: " << instancia << " | Vértices: " << grafo.qt_vertices << " | Veículos: " << grafo.veiculos << endl;
         outputFile << "Solução Construtivo - Score: " << s0.score << " | Custo: " << s0.custo << endl;
         outputFile << "Solução ILS - Score: " << s1.score << " | Custo: " << s1.custo << endl;
