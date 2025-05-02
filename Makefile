@@ -1,5 +1,5 @@
 # Nome do executável
-TARGET = my_program
+TARGET = main
 
 # Compilador
 CXX = g++
@@ -10,7 +10,7 @@ CXXFLAGS = -std=c++17 -w
 
 
 # Arquivos de origem (.cpp)
-SRCS = local_search_patrulhamento.cpp Instance.cpp Caminho.cpp Sol.cpp Busca_local.cpp Perturbacao.cpp Utils.cpp
+SRCS = main.cpp Instance.cpp Route.cpp Solution.cpp LocalSearch.cpp Perturbation.cpp Utils.cpp
 
 # Arquivos objeto (.o), gerados após a compilação
 OBJS = $(SRCS:.cpp=.o)
@@ -137,7 +137,7 @@ clean:
 # Executa o programa com os argumentos fornecidos
 run: $(TARGET)
             #   instancia     T_prot(min) / T_parada(min) / Velocidade(Km/h) 
-	./$(TARGET) 47_5_360_120_20_teste.txt 120
+	./$(TARGET) 47_5_360_120_20_teste.txt
 	# ./$(TARGET) 16_1_360_120_20.txt
 
 	
