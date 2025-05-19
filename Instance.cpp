@@ -70,7 +70,7 @@ Instance::Instance(const string &filename)
     }
     
     totalIterations = 0;
-    cout << "Leitura do arquivo concluída." << endl;
+    // cout << "Leitura do arquivo concluída." << endl;
 
     file.close();
 }

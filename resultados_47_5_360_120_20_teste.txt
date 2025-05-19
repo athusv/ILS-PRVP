@@ -1,77 +1,77 @@
 Tempo Máximo: 108000
-Seed: 2682198743 | Tempo de Execução: 10s | Max Itereções sem melhora: 1000
+Seed: 560281747 | Tempo de Execução: 10s | Max Itereções sem melhora: 1000
 T_prot: 120min | T_parada: 15min | Velocidade: Km/h
 Instância: 47_5_360_120_20_teste.txt | Vértices: 47 | Veículos: 5
-Solução Construtivo - Score: 1636.67 | Custo: 37904.3
-Solução ILS - Score: 5259.67 | Custo: 107135
-Melhoria de 221.365%
+Solução Construtivo - Score: 1460.67 | Custo: 30107.9
+Solução ILS - Score: 5354 | Custo: 107522
+Melhoria de 266.545%
 
 Contagem Estruturas de Vizinhança: 
-Best Insert = 228/492
-Swap Inter = 118/411
-Swap Intra = 29/408
-Swap Out = 112/458
-Para = 66/429
-Realocate = 119/448
+Best Insert = 222/571
+Swap Inter = 209/520
+Swap Intra = 39/500
+Swap Out = 101/530
+Para = 75/522
+Realocate = 185/562
 Contagem de Melhorias por rota
-Rota 3= 199/706
-Rota 1= 168/571
-Rota 5= 143/603
-Rota 2= 177/680
-Rota 4= 103/497
+Rota 1= 242/792
+Rota 2= 158/652
+Rota 4= 198/755
+Rota 5= 237/820
+Rota 3= 205/706
 Iterações totais: 1919
 ***********************************************
 
 Tempo Máximo: 108000
-Seed: 39039133 | Tempo de Execução: 10s | Max Itereções sem melhora: 1000
+Seed: 3368850249 | Tempo de Execução: 10s | Max Itereções sem melhora: 1000
 T_prot: 120min | T_parada: 15min | Velocidade: Km/h
 Instância: 47_5_360_120_20_teste.txt | Vértices: 47 | Veículos: 5
-Solução Construtivo - Score: 2932 | Custo: 64653.6
-Solução ILS - Score: 5233.33 | Custo: 107477
-Melhoria de 78.4902%
+Solução Construtivo - Score: 2628 | Custo: 47404.2
+Solução ILS - Score: 5055.33 | Custo: 93775
+Melhoria de 92.3643%
 
 Contagem Estruturas de Vizinhança: 
-Best Insert = 218/564
-Swap Inter = 138/445
-Swap Intra = 40/489
-Swap Out = 90/499
-Para = 45/497
-Realocate = 125/529
+Best Insert = 237/818
+Swap Inter = 159/668
+Swap Intra = 66/764
+Swap Out = 122/803
+Para = 49/754
+Realocate = 225/844
 Contagem de Melhorias por rota
-Rota 2= 205/748
-Rota 5= 98/586
-Rota 3= 222/817
-Rota 4= 97/587
-Rota 1= 172/730
-Iterações totais: 2149
+Rota 4= 110/914
+Rota 2= 317/1372
+Rota 3= 29/583
+Rota 1= 256/1268
+Rota 5= 305/1182
+Iterações totais: 2336
 ***********************************************
 
 Tempo Máximo: 108000
-Seed: 446092226 | Tempo de Execução: 10s | Max Itereções sem melhora: 1000
+Seed: 2273041259 | Tempo de Execução: 10s | Max Itereções sem melhora: 1000
 T_prot: 120min | T_parada: 15min | Velocidade: Km/h
 Instância: 47_5_360_120_20_teste.txt | Vértices: 47 | Veículos: 5
-Solução Construtivo - Score: 3978.67 | Custo: 83096.2
-Solução ILS - Score: 5193.67 | Custo: 107730
-Melhoria de 30.5379%
+Solução Construtivo - Score: 3365.33 | Custo: 62820.6
+Solução ILS - Score: 5119.33 | Custo: 94636.5
+Melhoria de 52.1197%
 
 Contagem Estruturas de Vizinhança: 
-Best Insert = 214/553
-Swap Inter = 87/437
-Swap Intra = 22/473
-Swap Out = 99/512
-Para = 27/487
-Realocate = 117/495
+Best Insert = 147/506
+Swap Inter = 90/429
+Swap Intra = 46/478
+Swap Out = 60/489
+Para = 38/479
+Realocate = 146/505
 Contagem de Melhorias por rota
-Rota 2= 206/851
-Rota 5= 77/537
-Rota 4= 54/515
-Rota 1= 121/638
-Rota 3= 195/853
-Iterações totais: 2292
+Rota 1= 134/739
+Rota 2= 59/494
+Rota 5= 100/657
+Rota 3= 201/818
+Rota 4= 123/607
+Iterações totais: 1990
 ***********************************************
 
--- Seed da melhor execução: 2682198743
--- Média de iterações: 764
--- Pontuação do Construtivo da melhor execução: 1636.67
--- Média de pontuação ILS: 5228.89
--- Melhor pontuação: 5259.67
+-- Seed da melhor execução: 560281747
+-- Média de iterações: 663
+-- Pontuação do Construtivo da melhor execução: 1460.67
+-- Média de pontuação ILS: 5176.22
+-- Melhor pontuação: 5354

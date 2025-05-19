@@ -16,8 +16,6 @@
 #include "Route.h"
 #include "Solution.h"
 #include "Utils.h"
-#include "Perturbation.h"
-#include "LocalSearch.h"
 
 #define NDEBUG
 
@@ -35,6 +33,8 @@ Solution ILS_Reset(Solution &initialSolution, Instance &instance, mt19937 random
     instance.totalIterations = 0;
     int iterationsWithoutImprovement = 0;
     // cout << "[ILS_Reset] Iniciando algoritmo ILS com Reset" << endl;
+    // cout << "[ILS_Reset] Solução Inicial Score: " << initialSolution.totalScore << endl;
+
 
     while (true)
     {
@@ -46,30 +46,36 @@ Solution ILS_Reset(Solution &initialSolution, Instance &instance, mt19937 random
         caller = "Pertubação";
         neighborSolution.checkSolution(instance, caller);
 
-        LocalSearch::localSearch(instance, neighborSolution, randomGenerator);
+        neighborSolution.localSearch(instance, randomGenerator);
         neighborSolution.updateSolutionTimeWindows();
         caller = "Busca Local";
         neighborSolution.checkSolution(instance, caller);
 
+        bool improved = false;
         if (!Utils::doubleGreaterOrEqual(bestLocalSolution.totalScore, neighborSolution.totalScore))
         {
             bestLocalSolution = neighborSolution;
             currentSolution = bestLocalSolution;
             iterationsWithoutImprovement = 0; // Reset ao encontrar uma melhora
+            improved = true;
         }
         else
         {
             iterationsWithoutImprovement++;
         }
 
+
         if (iterationsWithoutImprovement >= maxIterationsWithoutImprovement)
         {
+            // cout << "[ILS_Reset Debug] Reset acionado! Iter s/ Melhora: " << iterationsWithoutImprovement << ". BestLocal: " << bestLocalSolution.totalScore << ", BestGlobal: " << bestGlobalSolution.totalScore << endl;
             if (bestGlobalSolution.totalScore < bestLocalSolution.totalScore)
             {
+                // cout << "[ILS_Reset Debug] Atualizando BestGlobal antes do Reset." << endl;
                 bestGlobalSolution = bestLocalSolution;
             }
             Solution newSolution(instance);
             newSolution.Constructive(instance, randomGenerator);
+            // cout << "[ILS_Reset Debug] Nova solução construtiva gerada. Score: " << newSolution.totalScore << endl;
             bestLocalSolution = newSolution;
             currentSolution = bestLocalSolution;
             iterationsWithoutImprovement = 0;
@@ -81,8 +87,10 @@ Solution ILS_Reset(Solution &initialSolution, Instance &instance, mt19937 random
 
         if (duration.count() >= maxExecutionTime)
         {
+            // cout << "[ILS_Reset Debug] Tempo máximo atingido: " << duration.count() << "s. Encerrando." << endl;
             if (bestGlobalSolution.totalScore < bestLocalSolution.totalScore)
             {
+                //  cout << "[ILS_Reset Debug] Atualizando BestGlobal na saída por tempo." << endl;
                 bestGlobalSolution = bestLocalSolution;
             }
             break;
@@ -90,7 +98,7 @@ Solution ILS_Reset(Solution &initialSolution, Instance &instance, mt19937 random
 
         instance.totalIterations++;
     }
-
+    // cout << "[ILS_Reset] Fim do algoritmo. Melhor Score Global: " << bestGlobalSolution.totalScore << " | Total Iterações: " << instance.totalIterations << endl;
     return bestGlobalSolution;
 }
 
@@ -103,7 +111,10 @@ int main(int argc, char *argv[])
 
     string fileName = string(argv[1]);
     // Instance grafo("C:/Users/athus/Faculdade/6 periodo/PIBIT/solucao/pibit-rotas-pm/misc/ILS-algoritm/" + instancia, t_prot, t_parada, velocidade);
-    if (argc > 2)
+    if (argc > 2){
+
+    }
+    if (argc > 3)
     {
         seed_value = stoul(argv[2]);
         // cout << "Seed fornecida: " << seed_value << std::endl;
@@ -137,10 +148,10 @@ int main(int argc, char *argv[])
         seed_value = rd();
         mt19937 gen(seed_value);
         Solution s0(instance);
-        cout << s0 << endl;
-        cout << "Construtivo" << endl;
+        // cout << s0 << endl;
+        // cout << "Construtivo" << endl;
         s0.Constructive(instance, gen);
-        cout << s0 << endl;
+        // cout << s0 << endl;
         s0.updateSolutionTimeWindows();
         string chamou = "Construtivo";
         s0.checkSolution(instance, chamou);
@@ -165,12 +176,12 @@ int main(int argc, char *argv[])
                    << endl;
 
         outputFile << "Contagem Estruturas de Vizinhança: " << endl;
-        outputFile << "Best Insert = " << s1.cont_vizinhanca["best_insert"] << "/" << s1.cont_vizinhanca_total["best_insert"] << endl;
-        outputFile << "Swap Inter = " << s1.cont_vizinhanca["swap_inter"] << "/" << s1.cont_vizinhanca_total["swap_inter"] << endl;
-        outputFile << "Swap Intra = " << s1.cont_vizinhanca["swap_intra"] << "/" << s1.cont_vizinhanca_total["swap_intra"] << endl;
-        outputFile << "Swap Out = " << s1.cont_vizinhanca["swap_out"] << "/" << s1.cont_vizinhanca_total["swap_out"] << endl;
-        outputFile << "Para = " << s1.cont_vizinhanca["para"] << "/" << s1.cont_vizinhanca_total["para"] << endl;
-        outputFile << "Realocate = " << s1.cont_vizinhanca["realocate"] << "/" << s1.cont_vizinhanca_total["realocate"] << endl;
+        outputFile << "Best Insert = " << s1.neighborhoodUsageCount["bestInsert"] << "/" << s1.totalNeighborhoodOperations["bestInsert"] << endl;
+        outputFile << "Swap Inter = " << s1.neighborhoodUsageCount["swapInter"] << "/" << s1.totalNeighborhoodOperations["swapInter"] << endl;
+        outputFile << "Swap Intra = " << s1.neighborhoodUsageCount["swapIntra"] << "/" << s1.totalNeighborhoodOperations["swapIntra"] << endl;
+        outputFile << "Swap Out = " << s1.neighborhoodUsageCount["swapOut"] << "/" << s1.totalNeighborhoodOperations["swapOut"] << endl;
+        outputFile << "Para = " << s1.neighborhoodUsageCount["stop"] << "/" << s1.totalNeighborhoodOperations["stop"] << endl;
+        outputFile << "Realocate = " << s1.neighborhoodUsageCount["realocate"] << "/" << s1.totalNeighborhoodOperations["realocate"] << endl;
         outputFile << "Contagem de Melhorias por rota" << endl;
         priority_queue<Route> rotas_prontas;
         while (!s0.routes.empty())
@@ -196,17 +207,7 @@ int main(int argc, char *argv[])
     outputFile << "-- Melhor pontuação: " << best_s.totalScore << std::endl;
     outputFile.close();
     // instancia, seed_best, tempo, total_iterações, it_reset, mean_score, best_score, custo,
-    cout << fileName << ", " << seed_best << ", " << maxExecutionTime << ", " << mean_it << ", " << maxIterationsWithoutImprovement << ", " << mean_score << ", " << best_s.totalScore << endl;
-
-    // if (argc > 2)
-    // {
-    //     seed_value = stoul(argv[2]);
-    // }
-    // else
-    // {
-    //     random_device rd;
-    //     seed_value = rd();
-    // }
+    // cout << fileName << ", " << seed_best << ", " << maxExecutionTime << ", " << mean_it << ", " << maxIterationsWithoutImprovement << ", " << mean_score << ", " << best_s.totalScore << endl;
 
     // exportar um .TXT
 }
