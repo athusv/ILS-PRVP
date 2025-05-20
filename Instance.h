@@ -10,16 +10,16 @@ using namespace std;
 
 class Instance {
 public:
-    long long int iteracoes_totais;
-    int qt_vertices;
-    int veiculos;
-    vector<int> tipo_veiculo;
-    double t_max;
-    int t_prot;
-    int t_parada;
-    vector<int> velocidade;
-    vector<double> score_vertices;
-    vector<vector<double> > distancia_metros;
+    long long int totalIterations;
+    int numVertex;
+    int numVehicles;
+    vector<int> vehicleTypes;
+    double maxTime;
+    int protectionTime;
+    int stopTime;
+    vector<int> speed;
+    vector<double> vertexScores;
+    vector<vector<double>> distanceMatrix;
 
     Instance(const string &filename);
     friend ostream &operator<<(ostream &os, const Instance &instance);

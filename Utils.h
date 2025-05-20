@@ -4,22 +4,20 @@
 #include <cmath>
 #include <vector>
 #include <map>
-#include "Caminho.h"
+#include "Route.h"
 #include "Instance.h"
-#include "Sol.h"
+#include "Solution.h"
 
 class Utils {
 public:
     static bool doubleEquals(double a, double b, double epsilon = 1e-9);
     static bool doubleGreaterOrEqual(double a, double b, double epsilon = 1e-9);
     static bool doubleLessOrEqual(double a, double b, double epsilon = 1e-9);
-    static int max_score(const std::vector<int> &lista_candidatos, const std::vector<double>& score_vertices);
-    static int min_custo(const std::vector<int> &lista_candidatos, const vector<vector<double>> &distancia_matriz, int &last_vertice);
-    static int cost_benefit(const std::vector<int> &lista_candidatos,const vector<double>& score_vertices, const vector<vector<double>> &distancia_matriz, int &last_vertice);
-    static std::vector<int> make_lista(Instance& grafo, Caminho& rota, std::vector<std::map<double, int>>& visited_vertices);
-    static std::vector<double> p_excluir(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, Caminho& rota, int i);
-    static bool swap_perturbacao(Instance &grafo, Sol &S, Caminho &rota, int i);
-    static std::vector<double> p_insert(Instance& grafo, std::vector<std::map<double, int>>& visited_vertices, const Caminho& rota, int i, int vertice_insert);
+    static std::vector<int> createCandidateList(Instance &instance, Route &route, std::vector<std::map<double, int>> &visitedVertices);
+    static int findMaxScore(const std::vector<int> &candidates, const std::vector<double> &vertexScores);
+    static int findMinCost(const std::vector<int> &candidates, const vector<vector<double>> &costMatrix, int &lastVertex);
+    static int findBestCostBenefit(const std::vector<int> &candidates, const vector<double> &vertexScores, const vector<vector<double>> &costMatrix, int &lastVertex);
+    static std::vector<double> tryExcludeVertex(Instance &instance, std::vector<std::map<double, int>> &visitedVertices, Route &route, int vertexIndex);
 };
 
 #endif // UTILS_H
