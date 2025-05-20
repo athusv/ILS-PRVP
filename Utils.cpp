@@ -51,8 +51,9 @@ int Utils::findBestCostBenefit(const std::vector<int> &candidates, const vector<
 
 std::vector<int> Utils::createCandidateList(Instance &instance, Route &route, std::vector<std::map<double, int>> &visitedVertices){
     std::vector<int> candidateList;
-    
-    for (int i = 1; i < instance.numVertices; i++) {
+
+    for (int i = 1; i < instance.numVertex; i++)
+    {
         if (visitedVertices[i].empty() || doubleLessOrEqual(visitedVertices[i].rbegin()->first, route.cost)) {
             double dist1 = route.costMatrix[route.vertexSequence.back()][i];
             double dist2 = route.costMatrix[i][0];
@@ -61,7 +62,7 @@ std::vector<int> Utils::createCandidateList(Instance &instance, Route &route, st
             }
         }
     }
-    
+
     return candidateList;
 }
 

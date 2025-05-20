@@ -45,6 +45,7 @@ public:
     void PerturbationWithStrength(Instance &instance, mt19937 &randomGenerator, double perturbationIntensity);
     void localSearch(Instance &instance, mt19937 &randomGenerator);
     void printSolution(Instance &instance);
+    void printJson(Instance &instance);
     void updateSolutionTimeWindows();
     bool checkSolution(Instance &instance, string &caller);
     bool operator<(const Solution &solution) const;

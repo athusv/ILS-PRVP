@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Utils.h"
 #include <random>
+#include <nlohmann/json.hpp>
 using namespace std;
 
 enum class Operation
@@ -16,7 +17,7 @@ enum class Operation
 };
 
 Solution::Solution(const Instance &instance) {
-    visitedVertices.resize(instance.numVertices);
+    visitedVertices.resize(instance.numVertex);
 
     int id = 0;
     for (int i = 0; i < instance.vehicleTypes.size(); i++) {
@@ -540,7 +541,7 @@ void Solution::PerturbationWithStrength(Instance &instance, mt19937 &randomGener
                 n = 0;
                 continue;
             }
-            if (route.outOfRouteSwap(instance.vertexScores, instance.numVertices, visitedVertices, totalScore, totalCost, index, index + 1, bestImprovement))
+            if (route.outOfRouteSwap(instance.vertexScores, instance.numVertex, visitedVertices, totalScore, totalCost, index, index + 1, bestImprovement))
             {
                 updateSolutionTimeWindows();
 
@@ -614,7 +615,7 @@ void Solution::localSearch(Instance &instance, mt19937 &randomGenerator)
                 totalNeighborhoodOperations["bestInsert"] += 1;
                 testedRoutes[route.id] += 1;
                 // cout << "***Tentando bestInsert rota " << route.id << endl;
-                if (route.bestInsert(instance.vertexScores, instance.numVertices, visitedVertices, totalScore, totalCost, bestImprovement))
+                if (route.bestInsert(instance.vertexScores, instance.numVertex, visitedVertices, totalScore, totalCost, bestImprovement))
                 {
                     // cout << "---BestInsert melhorou: " << totalScore << endl;
                     routes.push(route);
@@ -680,7 +681,7 @@ void Solution::localSearch(Instance &instance, mt19937 &randomGenerator)
                 totalNeighborhoodOperations["swapOut"] += 1;
                 testedRoutes[route.id] += 1;
                 // cout << "***Tentando swapOut rota " << route.id << endl;
-                if (route.outOfRouteSwap(instance.vertexScores, instance.numVertices, visitedVertices, totalScore, totalCost, 1, route.vertexSequence.size() - 1, bestImprovement))
+                if (route.outOfRouteSwap(instance.vertexScores, instance.numVertex, visitedVertices, totalScore, totalCost, 1, route.vertexSequence.size() - 1, bestImprovement))
                 {
                     // cout << "---SwapOut melhorou: " << totalScore << endl;
                     routes.push(route);
@@ -778,7 +779,8 @@ bool Solution::checkSequenceVertex(Instance &instance, string &caller)
 
 bool Solution::checkVisited(const Instance &instance, string &caller) const{
     bool check = true;
-    for (int i = 1; i < instance.numVertices; i++) {
+    for (int i = 1; i < instance.numVertex; i++)
+    {
         if (visitedVertices[i].empty() || visitedVertices[i].size() == 1) continue;
 
         auto it1 = visitedVertices[i].begin();
@@ -970,6 +972,33 @@ void Solution::printSolution(Instance &instance)
     // cout <<endl;
 }
 
+void Solution::printJson(Instance &instance){
+    nlohmann::json result;
+    result["totalIterations"] = instance.totalIterations;
+    result["totalScore"] = totalScore;
+    result["totalCost"] = totalCost;
+    result["numVertex"] = instance.numVertex;
+    result["maxTime"] = instance.maxTime;
+    result["protectionTime"] = instance.protectionTime;
+    result["stopTime"] = instance.stopTime;
+    
+    priority_queue<Route> auxRoutes = routes;
+    while(!auxRoutes.empty()){
+        Route route = auxRoutes.top();
+        nlohmann::json routeJson;
+        routeJson["score"] = route.score;
+        routeJson["cost"] = route.cost;
+        routeJson["speed"] = route.speed;
+        routeJson["route"] = route.vertexSequence;
+        routeJson["stop"] = route.isStopVertex;
+        result["routes"].push_back(routeJson);
+        auxRoutes.pop();
+    }
+
+    cout << setw(1) << result << endl;
+}
+
+
 bool Solution::operator<(const Solution &solution) const{
     return totalScore > solution.totalScore;
 }
@@ -978,7 +1007,7 @@ ostream &operator<<(ostream &os, const Solution &solution){
     priority_queue<Route> routesCopy = solution.routes;
     // os << "Score: " << solution.totalScore << ", Custo: " << solution.totalCost << endl;
     while (!routesCopy.empty()) {
-        // os << routesCopy.top() << endl;
+        os << routesCopy.top() << endl;
         routesCopy.pop();
     }
     return os;

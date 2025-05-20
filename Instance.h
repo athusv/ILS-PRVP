@@ -11,7 +11,7 @@ using namespace std;
 class Instance {
 public:
     long long int totalIterations;
-    int numVertices;
+    int numVertex;
     int numVehicles;
     vector<int> vehicleTypes;
     double maxTime;

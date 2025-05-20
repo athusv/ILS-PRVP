@@ -108,13 +108,19 @@ int main(int argc, char *argv[])
     std::random_device rd;
     double maxExecutionTime = 10.0;
     int maxIterationsWithoutImprovement = 1000;
+    int modo_execucao = 0;
 
     string fileName = string(argv[1]);
     // Instance grafo("C:/Users/athus/Faculdade/6 periodo/PIBIT/solucao/pibit-rotas-pm/misc/ILS-algoritm/" + instancia, t_prot, t_parada, velocidade);
     if (argc > 2){
-
+        modo_execucao = stoi(argv[2]);
+        if (modo_execucao != 0 && modo_execucao != 1)
+        {
+            cerr << "Modo de execução inválido. Use 0 para teste ou 1 para produção." << endl;
+            return 1;
+        }
     }
-    if (argc > 3)
+    else if (argc > 3)
     {
         seed_value = stoul(argv[2]);
         // cout << "Seed fornecida: " << seed_value << std::endl;
@@ -125,23 +131,40 @@ int main(int argc, char *argv[])
         seed_value = rd();
         // cout << "Seed aleatória gerada: " << seed_value << std::endl;
     }
-    std::ofstream outputFile("resultados_" + fileName);
 
-    // Verifica se o arquivo foi aberto corretamente
-    if (!outputFile)
-    {
-        std::cerr << "Erro ao abrir o arquivo!" << std::endl;
-        return 1;
-    }
-    
     Instance instance("Instancias/" + fileName);
+
     Solution best_s = Solution(instance);
     double mean_score = 0;
     long long int mean_it = 0;
     double b_score_construtivo;
     unsigned int seed_best;
+
+    std::ofstream outputFile;
+    if (modo_execucao == 0)
+    {
+        size_t pos = fileName.rfind('.');
+
+        if (pos != std::string::npos)
+        {
+            fileName.replace(pos, std::string::npos, ".txt");
+        }
+        outputFile = std::ofstream("resultados_" + fileName);
+        // Verifica se o arquivo foi aberto corretamente
+        if (!outputFile)
+        {
+            std::cerr << "Erro ao abrir o arquivo!" << std::endl;
+            return 1;
+        }
+    }
+
+    int num_execucoes = 3;
+    if (modo_execucao == 1)
+    {
+        num_execucoes = 1;
+    }
     int n;
-    for (n = 0; n < 3; n++)
+    for (n = 0; n < num_execucoes; n++)
     {
 
         random_device rd;
@@ -166,48 +189,56 @@ int main(int argc, char *argv[])
         }
         double percentual_melhora = (static_cast<double>(s1.totalScore - s0.totalScore) / s0.totalScore) * 100;
 
-        outputFile << "Tempo Máximo: " << instance.maxTime * instance.numVehicles << std::endl;
-        outputFile << "Seed: " << seed_value << " | Tempo de Execução: " << maxExecutionTime << "s | Max Itereções sem melhora: " << maxIterationsWithoutImprovement << endl;
-        outputFile << "T_prot: " << instance.protectionTime / 60 << "min | T_parada: " << instance.stopTime / 60 << "min | Velocidade: " << "Km/h" << endl;
-        outputFile << "Instância: " << fileName << " | Vértices: " << instance.numVertices << " | Veículos: " << instance.numVehicles << endl;
-        outputFile << "Solução Construtivo - Score: " << s0.totalScore << " | Custo: " << s0.totalCost << endl;
-        outputFile << "Solução ILS - Score: " << s1.totalScore << " | Custo: " << s1.totalCost << endl;
-        outputFile << "Melhoria de " << percentual_melhora << "%" << endl
-                   << endl;
-
-        outputFile << "Contagem Estruturas de Vizinhança: " << endl;
-        outputFile << "Best Insert = " << s1.neighborhoodUsageCount["bestInsert"] << "/" << s1.totalNeighborhoodOperations["bestInsert"] << endl;
-        outputFile << "Swap Inter = " << s1.neighborhoodUsageCount["swapInter"] << "/" << s1.totalNeighborhoodOperations["swapInter"] << endl;
-        outputFile << "Swap Intra = " << s1.neighborhoodUsageCount["swapIntra"] << "/" << s1.totalNeighborhoodOperations["swapIntra"] << endl;
-        outputFile << "Swap Out = " << s1.neighborhoodUsageCount["swapOut"] << "/" << s1.totalNeighborhoodOperations["swapOut"] << endl;
-        outputFile << "Para = " << s1.neighborhoodUsageCount["stop"] << "/" << s1.totalNeighborhoodOperations["stop"] << endl;
-        outputFile << "Realocate = " << s1.neighborhoodUsageCount["realocate"] << "/" << s1.totalNeighborhoodOperations["realocate"] << endl;
-        outputFile << "Contagem de Melhorias por rota" << endl;
-        priority_queue<Route> rotas_prontas;
-        while (!s0.routes.empty())
+        if (modo_execucao == 0)
         {
-            Route rota = s0.routes.top();
-            s0.routes.pop();
-            outputFile << "Rota " << rota.id << "= " << s1.improvedRoutes[rota.id] << "/" << s1.testedRoutes[rota.id] << endl;
-            rotas_prontas.push(rota);
+            outputFile << "Tempo Máximo: " << instance.maxTime * instance.numVehicles << std::endl;
+            outputFile << "Seed: " << seed_value << " | Tempo de Execução: " << maxExecutionTime << "s | Max Itereções sem melhora: " << maxIterationsWithoutImprovement << endl;
+            outputFile << "T_prot: " << instance.protectionTime / 60 << "min | T_parada: " << instance.stopTime / 60 << "min | Velocidade: " << "Km/h" << endl;
+            outputFile << "Instância: " << fileName << " | Vértices: " << instance.numVertex << " | Veículos: " << instance.numVehicles << endl;
+            outputFile << "Solução Construtivo - Score: " << s0.totalScore << " | Custo: " << s0.totalCost << endl;
+            outputFile << "Solução ILS - Score: " << s1.totalScore << " | Custo: " << s1.totalCost << endl;
+            outputFile << "Melhoria de " << percentual_melhora << "%" << endl
+                       << endl;
+
+            outputFile << "Contagem Estruturas de Vizinhança: " << endl;
+            outputFile << "Best Insert = " << s1.neighborhoodUsageCount["bestInsert"] << "/" << s1.totalNeighborhoodOperations["bestInsert"] << endl;
+            outputFile << "Swap Inter = " << s1.neighborhoodUsageCount["swapInter"] << "/" << s1.totalNeighborhoodOperations["swapInter"] << endl;
+            outputFile << "Swap Intra = " << s1.neighborhoodUsageCount["swapIntra"] << "/" << s1.totalNeighborhoodOperations["swapIntra"] << endl;
+            outputFile << "Swap Out = " << s1.neighborhoodUsageCount["swapOut"] << "/" << s1.totalNeighborhoodOperations["swapOut"] << endl;
+            outputFile << "Para = " << s1.neighborhoodUsageCount["stop"] << "/" << s1.totalNeighborhoodOperations["stop"] << endl;
+            outputFile << "Realocate = " << s1.neighborhoodUsageCount["realocate"] << "/" << s1.totalNeighborhoodOperations["realocate"] << endl;
+            outputFile << "Contagem de Melhorias por rota" << endl;
+            priority_queue<Route> rotas_prontas;
+            while (!s0.routes.empty())
+            {
+                Route rota = s0.routes.top();
+                s0.routes.pop();
+                outputFile << "Rota " << rota.id << "= " << s1.improvedRoutes[rota.id] << "/" << s1.testedRoutes[rota.id] << endl;
+                rotas_prontas.push(rota);
+            }
+            s0.routes = rotas_prontas;
+
+            outputFile << "Iterações totais: " << instance.totalIterations << endl;
+            outputFile << "***********************************************" << std::endl
+                       << endl;
+
         }
-        s0.routes = rotas_prontas;
-
-        outputFile << "Iterações totais: " << instance.totalIterations << endl;
-        outputFile << "***********************************************" << std::endl
-                   << endl;
+        else if (modo_execucao == 1)
+        {
+            best_s.printJson(instance);
+        }
     }
-
-    mean_score = mean_score / n;
-    mean_it = static_cast<int>(instance.totalIterations / n);
-    outputFile << "-- Seed da melhor execução: " << seed_best << std::endl;
-    outputFile << "-- Média de iterações: " << mean_it << std::endl;
-    outputFile << "-- Pontuação do Construtivo da melhor execução: " << b_score_construtivo << std::endl;
-    outputFile << "-- Média de pontuação ILS: " << mean_score << std::endl;
-    outputFile << "-- Melhor pontuação: " << best_s.totalScore << std::endl;
-    outputFile.close();
-    // instancia, seed_best, tempo, total_iterações, it_reset, mean_score, best_score, custo,
-    // cout << fileName << ", " << seed_best << ", " << maxExecutionTime << ", " << mean_it << ", " << maxIterationsWithoutImprovement << ", " << mean_score << ", " << best_s.totalScore << endl;
-
-    // exportar um .TXT
+    if (modo_execucao == 0)
+    {
+        mean_score = mean_score / n;
+        mean_it = static_cast<int>(instance.totalIterations / n);
+        outputFile << "-- Seed da melhor execução: " << seed_best << std::endl;
+        outputFile << "-- Média de iterações: " << mean_it << std::endl;
+        outputFile << "-- Pontuação do Construtivo da melhor execução: " << b_score_construtivo << std::endl;
+        outputFile << "-- Média de pontuação ILS: " << mean_score << std::endl;
+        outputFile << "-- Melhor pontuação: " << best_s.totalScore << std::endl;
+        outputFile.close();
+        // instancia, seed_best, tempo, total_iterações, it_reset, mean_score, best_score, custo,
+        cout << fileName << ", " << seed_best << ", " << maxExecutionTime << ", " << mean_it << ", " << maxIterationsWithoutImprovement << ", " << mean_score << ", " << best_s.totalScore << ", " << best_s.totalCost << endl;
+    }
 }

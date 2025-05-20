@@ -19,11 +19,11 @@ Route::Route(const Instance &instance, int id, int vehicleType)
     arrivalTimes.push_back(0);
     timeWindows.push_back({999, 999});
 
-    costMatrix.resize(instance.numVertices, vector<double>(instance.numVertices, 0));
+    costMatrix.resize(instance.numVertex, vector<double>(instance.numVertex, 0));
     double metersPerSecond = speed / 3.6;
-    for (int i = 0; i < instance.numVertices; i++)
+    for (int i = 0; i < instance.numVertex; i++)
     {
-        for (int j = 0; j < instance.numVertices; j++)
+        for (int j = 0; j < instance.numVertex; j++)
         {
             costMatrix[i][j] = instance.distanceMatrix[i][j] / metersPerSecond;
             // if (i == 0 && j < 5) { // Exemplo: imprime as primeiras 5 distâncias da primeira linha

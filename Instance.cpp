@@ -1,83 +1,135 @@
 #include "Instance.h"
 #include <vector>
 #include <string>
+#include <nlohmann/json.hpp>
 
+// Construtor para leitura de arquivo (detecta automaticamente se é JSON ou formato texto)
 Instance::Instance(const string &filename)
 {
-    // cout << "Iniciando a leitura do arquivo: " << filename << endl;
-    ifstream file(filename);
+    // Verifica se o arquivo tem extensão .json
+    bool isJsonFormat = false;
+    size_t jsonPos = filename.find(".json");
+    if (jsonPos != string::npos)
+    {
+        isJsonFormat = true;
+    }
 
+    // Abre o arquivo
+    ifstream file(filename);
     if (!file.is_open()) {
-        cerr << "Erro ao abrir o arquivo!" << endl;
+        cerr << "Erro ao abrir o arquivo: " << filename << endl;
         exit(1);
     }
 
-    file >> numVertices;
-    // cout << "Quantidade de vértices: " << qt_vertices << endl;
-    file >> maxTime;
-    // cout << "Tempo máximo lido: " << tmax << endl;
-    file >> protectionTime;
-    int numVehicleTypes;
-    file >> numVehicleTypes;
-    // cout << "Quantidade de tipos de veículos: " << quantos_tipos_veiculos << endl;
-
-    for(int i = 0; i < numVehicleTypes; i++){
-        int numVehiclesType;
-        file >> numVehiclesType;
-        vehicleTypes.push_back(numVehiclesType);
-        // cout << "Tipo de veículo " << i << ": " << quantos_cada_tipo << " unidades" << endl;
-    }
-    for (int i = 0; i < numVehicleTypes; i++){
-        int speed_type;
-        file >> speed_type;
-        speed.push_back(speed_type);
-        // cout << "Velocidade do tipo " << i << ": " << speed_type << " km/h" << endl;
-    }
-
-    numVehicles = 0;
-    for(int i = 0; i < vehicleTypes.size(); i++){
-        numVehicles += vehicleTypes[i];
-    }
-    // cout << "Quantidade total de veículos: " << veiculos << endl;
-
-    maxTime = maxTime * 60;
-    protectionTime = protectionTime * 60;
-    stopTime = 15 * 60;
-    // cout << "t_max: " << t_max << ", t_prot: " << t_prot << ", t_parada: " << t_parada << endl;
-
-    
-    int id;
-    double score;
-
-    for (int i = 0; i < numVertices; i++) {
-        file >> id >> score;
-        vertexScores.push_back(score);
-        // cout << "Vértice " << id << " com score " << score << endl;
-    }
-
-    distanceMatrix.resize(numVertices, vector<double>(numVertices, 0));
-    double aux;
-    for (int i = 0; i < numVertices; i++)
+    if (isJsonFormat)
     {
-        for (int j = 0; j < numVertices; j++)
+        // Leitura de arquivo JSON
+        nlohmann::json jsonData;
+        file >> jsonData;
+        file.close();
+
+        // Extrair os dados do JSON
+        numVertex = jsonData["numVertex"].get<int>();
+        maxTime = jsonData["maxTime"].get<int>() * 60;               // Converter para segundos
+        protectionTime = jsonData["protectionTime"].get<int>() * 60; // Converter para segundos
+        stopTime = 15 * 60;                                          // Padrão de 15 minutos em segundos
+
+        // Ler tipos de veículos e velocidades
+        vehicleTypes = jsonData["vehicleTypes"].get<vector<int>>();
+        speed = jsonData["speed"].get<vector<int>>();
+
+        // Calcular número total de veículos
+        numVehicles = 0;
+        for (int i = 0; i < vehicleTypes.size(); i++)
         {
-            file >> aux;
-            distanceMatrix[i][j] = aux;
-            // if (i == 0 && j < 5) { // Exemplo: imprime as primeiras 5 distâncias da primeira linha
-                // cout << "Distância de " << i << " para " << j << ": " << aux << " metros" << endl;
-            // }
+            numVehicles += vehicleTypes[i];
+        }
+
+        // Ler scores dos vértices
+        vertexScores = jsonData["scores"].get<vector<double>>();
+
+        // Ler matriz de distâncias
+        auto jsonCosts = jsonData["costs"];
+        distanceMatrix.resize(numVertex, vector<double>(numVertex, 0));
+        for (int i = 0; i < numVertex; i++)
+        {
+            for (int j = 0; j < numVertex; j++)
+            {
+                distanceMatrix[i][j] = jsonCosts[i][j].get<double>();
+            }
         }
     }
-    
-    totalIterations = 0;
-    // cout << "Leitura do arquivo concluída." << endl;
+    else
+    {
+        // Leitura de arquivo formato texto original
+        file >> numVertex;
+        // cout << "Quantidade de vértices: " << qt_vertices << endl;
+        file >> maxTime;
+        // cout << "Tempo máximo lido: " << tmax << endl;
+        file >> protectionTime;
+        int numVehicleTypes;
+        file >> numVehicleTypes;
+        // cout << "Quantidade de tipos de veículos: " << quantos_tipos_veiculos << endl;
 
+        for (int i = 0; i < numVehicleTypes; i++)
+        {
+            int numVehiclesType;
+            file >> numVehiclesType;
+            vehicleTypes.push_back(numVehiclesType);
+            // cout << "Tipo de veículo " << i << ": " << quantos_cada_tipo << " unidades" << endl;
+        }
+        for (int i = 0; i < numVehicleTypes; i++)
+        {
+            int speed_type;
+            file >> speed_type;
+            speed.push_back(speed_type);
+            // cout << "Velocidade do tipo " << i << ": " << speed_type << " km/h" << endl;
+        }
+
+        numVehicles = 0;
+        for (int i = 0; i < vehicleTypes.size(); i++)
+        {
+            numVehicles += vehicleTypes[i];
+        }
+        // cout << "Quantidade total de veículos: " << veiculos << endl;
+
+        maxTime = maxTime * 60;
+        protectionTime = protectionTime * 60;
+        stopTime = 15 * 60;
+        // cout << "t_max: " << t_max << ", t_prot: " << t_prot << ", t_parada: " << t_parada << endl;
+
+        int id;
+        double score;
+
+        for (int i = 0; i < numVertex; i++)
+        {
+            file >> id >> score;
+            vertexScores.push_back(score);
+            // cout << "Vértice " << id << " com score " << score << endl;
+        }
+
+        distanceMatrix.resize(numVertex, vector<double>(numVertex, 0));
+        double aux;
+        for (int i = 0; i < numVertex; i++)
+        {
+            for (int j = 0; j < numVertex; j++)
+            {
+                file >> aux;
+                distanceMatrix[i][j] = aux;
+                // if (i == 0 && j < 5) { // Exemplo: imprime as primeiras 5 distâncias da primeira linha
+                // cout << "Distância de " << i << " para " << j << ": " << aux << " metros" << endl;
+                // }
+            }
+        }
+    }
+
+    totalIterations = 0;
     file.close();
 }
 
 ostream &operator<<(ostream &os, const Instance &instance)
 {
-    os << "Quantidade de Vértices: " << instance.numVertices << endl;
+    os << "Quantidade de Vértices: " << instance.numVertex << endl;
     os << "Número de Veículos: " << instance.numVehicles << endl;
     os << "Tempo Máximo (t_max): " << instance.maxTime << endl;
     os << "Tempo de Proteção (t_prot): " << instance.protectionTime << endl;
