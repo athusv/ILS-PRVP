@@ -31,6 +31,28 @@ Route::Route(const Instance &instance, int id, int vehicleType)
             // }
         }
     }
+    // cout << "Rota " << id << " do veículo " << vehicleType << ":" << endl
+    //      << endl;
+    // Inicializar nearestVertices ajustando os tempos para a velocidade do veículo
+    nearestVertices.resize(instance.numVertex);
+    for (int i = 0; i < instance.numVertex; i++)
+    {
+        nearestVertices[i] = instance.nearestVertices[i];
+
+        // Converter distâncias para custos (tempo) baseado na velocidade do veículo
+        for (auto &vertexDist : nearestVertices[i])
+        {
+            vertexDist.distance = vertexDist.distance / metersPerSecond;
+        }
+
+        // cout << "Vértice " << i << " tem " << nearestVertices[i].size() << " vértices próximos: [";
+        // for (const auto &vertex : nearestVertices[i])
+        // {
+        //     cout << "(" << vertex.index << ", " << vertex.distance << "), ";
+        // }
+        // cout << "]" << endl;
+    }
+
     // cout << "Construção do objeto Caminho concluída." << endl;
 }
 
@@ -375,6 +397,142 @@ bool Route::bestInsert(const vector<double> &vertexScores, int numVertices, vect
                 {
                     continue;
                 }
+
+                dist1 = costMatrix[anterior][v];
+                dist2 = costMatrix[v][proximo];
+                dist3 = costMatrix[anterior][proximo];
+                double impacto = dist1 + dist2 + additionalStopTime - dist3;
+
+                if (cost + impacto > maxTime)
+                    continue;
+
+                if (b_vert_insert[1] == score_v && b_vert_insert[2] < impacto)
+                {
+                    continue;
+                }
+
+                bool local_visita = false;
+                if (visitedVertices[v].empty())
+                {
+                    local_visita = true;
+                }
+                else
+                {
+                    auto it = visitedVertices[v].lower_bound(
+                        arrivalTimes[j] + dist1 + additionalStopTime + protectionTime);
+                    if (it == visitedVertices[v].end())
+                    {
+                        auto it_prev = prev(it);
+                        if (Utils::doubleLessOrEqual(it_prev->first, arrivalTimes[j] + dist1))
+                        {
+                            local_visita = true;
+                        }
+                        else
+                        {
+                            local_visita = false;
+                        }
+                    }
+                    else if (it == visitedVertices[v].begin())
+                    {
+                        if (Utils::doubleLessOrEqual(arrivalTimes[j] + dist1 + additionalStopTime + protectionTime, it->first - protectionTime))
+                        {
+                            local_visita = true;
+                        }
+                        else
+                        {
+                            local_visita = false;
+                        }
+                    }
+                    else
+                    {
+                        auto it_prev = prev(it);
+                        if (Utils::doubleLessOrEqual(arrivalTimes[j] + dist1 + additionalStopTime + protectionTime, it->first - protectionTime) &&
+                            Utils::doubleLessOrEqual(
+                                it_prev->first, arrivalTimes[j] + dist1))
+                        {
+                            local_visita = true;
+                        }
+                    }
+                }
+
+                if (!local_visita)
+                    continue;
+
+                bool possibilidade_visita;
+                if (impacto < 0)
+                {
+                    possibilidade_visita = (Utils::doubleGreaterOrEqual(timeWindows[j + 1].first, impacto * -1));
+                }
+                else
+                {
+                    possibilidade_visita = (Utils::doubleGreaterOrEqual(timeWindows[j + 1].second, impacto));
+                }
+
+                if (possibilidade_visita)
+                {
+                    b_vert_insert[0] = v;                                            // id vertice
+                    b_vert_insert[1] = score_v;                                      // score vertice
+                    b_vert_insert[2] = impacto;                                      // impacto insert_v vertice
+                    b_vert_insert[3] = j + 1;                                        // Local insert rota
+                    b_vert_insert[4] = arrivalTimes[j] + dist1 + additionalStopTime; // Visita_custo
+                    b_vert_insert[5] = (additionalStopTime == stopTime) ? 1 : 0;
+
+                    if (!isBest)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!isBest && b_vert_insert[0] != -1)
+                break;
+        }
+        if (!isBest && b_vert_insert[0] != -1)
+            break;
+    }
+
+    // realizar a mudança aqui dentro
+    if (b_vert_insert[0] == -1)
+    {
+        return false;
+    }
+    else
+    {
+        insertVertex(b_vert_insert, visitedVertices, solutionScore, solutionCost);
+        return true;
+    }
+}
+
+bool Route::bestInsertNearestVertices(const vector<double> &vertexScores, int numVertices, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, bool &isBest)
+{
+    //                 id, score, custo, local insert, custo local insert, local visita
+    std::vector<double> b_vert_insert = {-1, -1, -1, -1, -1, -1};
+
+    double dist1 = 0;
+    double dist2 = 0;
+    double dist3 = 0;
+
+    for (int n = 0; n < 2; n++)
+    {
+        additionalStopTime = (n == 1) ? 0 : stopTime;
+
+        for (int j = 0; j < vertexSequence.size() - 1; j++)
+        {
+            int anterior = vertexSequence[j];
+            int proximo = vertexSequence[j + 1];
+
+            for (auto &vertex : nearestVertices[anterior])
+            {
+                int v = vertex.index;
+                if (v == 0)
+                    continue;
+                if (v == anterior || v == proximo)
+                    continue;
+                if (cost + vertex.distance > maxTime)
+                    continue;
+                if (vertexScores[v] < b_vert_insert[1])
+                    continue;
+
+                double score_v = (additionalStopTime == stopTime) ? vertexScores[v] : vertexScores[v] / 3;
 
                 dist1 = costMatrix[anterior][v];
                 dist2 = costMatrix[v][proximo];

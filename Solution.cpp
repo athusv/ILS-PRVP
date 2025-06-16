@@ -12,8 +12,8 @@ enum class Operation
     SwapIntra,
     SwapOut,
     Stop,
-    Realocate,
-    TwoOpt
+    // Realocate,
+    // TwoOpt
 };
 
 Solution::Solution(const Instance &instance) {
@@ -615,7 +615,7 @@ void Solution::localSearch(Instance &instance, mt19937 &randomGenerator)
                 totalNeighborhoodOperations["bestInsert"] += 1;
                 testedRoutes[route.id] += 1;
                 // cout << "***Tentando bestInsert rota " << route.id << endl;
-                if (route.bestInsert(instance.vertexScores, instance.numVertex, visitedVertices, totalScore, totalCost, bestImprovement))
+                if (route.bestInsertNearestVertices(instance.vertexScores, instance.numVertex, visitedVertices, totalScore, totalCost, bestImprovement))
                 {
                     // cout << "---BestInsert melhorou: " << totalScore << endl;
                     routes.push(route);

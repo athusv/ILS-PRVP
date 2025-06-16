@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 {
     unsigned int seed_value;
     std::random_device rd;
-    double maxExecutionTime = 10.0;
+    double maxExecutionTime = 180.0;
     int maxIterationsWithoutImprovement = 1000;
     int modo_execucao = 0;
 

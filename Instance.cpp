@@ -1,6 +1,7 @@
 #include "Instance.h"
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <nlohmann/json.hpp>
 
 // Construtor para leitura de arquivo (detecta automaticamente se é JSON ou formato texto)
@@ -48,15 +49,37 @@ Instance::Instance(const string &filename)
         // Ler scores dos vértices
         vertexScores = jsonData["scores"].get<vector<double>>();
 
-        // Ler matriz de distâncias
+        // Ler matriz de distâncias e calcular vértices mais próximos
         auto jsonCosts = jsonData["costs"];
         distanceMatrix.resize(numVertex, vector<double>(numVertex, 0));
+        nearestVertices.resize(numVertex);
+
         for (int i = 0; i < numVertex; i++)
         {
             for (int j = 0; j < numVertex; j++)
             {
                 distanceMatrix[i][j] = jsonCosts[i][j].get<double>();
+
+                // Adicionar à lista de vértices próximos (exceto o próprio vértice)
+                if (i != j)
+                {
+                    nearestVertices[i].push_back(VertexDistance(j, distanceMatrix[i][j]));
+                }
             }
+
+            // Ordenar a lista de vértices próximos por distância
+            sort(nearestVertices[i].begin(), nearestVertices[i].end(),
+                 [](const VertexDistance &a, const VertexDistance &b)
+                 {
+                     return a.distance < b.distance;
+                 });
+
+            // cout << "Vértice " << i << " tem " << nearestVertices[i].size() << " vértices próximos: [";
+            // for (const auto &vertex : nearestVertices[i])
+            // {
+            //     cout << "(" << vertex.index << ", " << vertex.distance << "), ";
+            // }
+            // cout << "]" << endl;
         }
     }
     else
@@ -109,6 +132,8 @@ Instance::Instance(const string &filename)
         }
 
         distanceMatrix.resize(numVertex, vector<double>(numVertex, 0));
+        nearestVertices.resize(numVertex);
+
         double aux;
         for (int i = 0; i < numVertex; i++)
         {
@@ -116,10 +141,23 @@ Instance::Instance(const string &filename)
             {
                 file >> aux;
                 distanceMatrix[i][j] = aux;
+
+                // Adicionar à lista de vértices próximos (exceto o próprio vértice)
+                if (i != j)
+                {
+                    nearestVertices[i].push_back(VertexDistance(j, aux));
+                }
                 // if (i == 0 && j < 5) { // Exemplo: imprime as primeiras 5 distâncias da primeira linha
                 // cout << "Distância de " << i << " para " << j << ": " << aux << " metros" << endl;
                 // }
             }
+
+            // Ordenar a lista de vértices próximos por distância
+            sort(nearestVertices[i].begin(), nearestVertices[i].end(),
+                 [](const VertexDistance &a, const VertexDistance &b)
+                 {
+                     return a.distance < b.distance;
+                 });
         }
     }
 
@@ -158,6 +196,22 @@ ostream &operator<<(ostream &os, const Instance &instance)
         {
             os << "[" << j << "]: " << instance.distanceMatrix[i][j];
             if (j + 1 != instance.distanceMatrix[i].size())
+            {
+                os << ", ";
+            }
+        }
+        os << endl;
+    }
+
+    os << "\nVértices Mais Próximos (ordenados por distância): " << endl;
+    for (size_t i = 0; i < instance.nearestVertices.size(); i++)
+    {
+        os << "Vértice " << i << ": ";
+        for (size_t j = 0; j < instance.nearestVertices[i].size(); j++)
+        {
+            os << "[" << instance.nearestVertices[i][j].index << ":"
+               << instance.nearestVertices[i][j].distance << "]";
+            if (j + 1 != instance.nearestVertices[i].size())
             {
                 os << ", ";
             }

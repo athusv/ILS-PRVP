@@ -25,12 +25,14 @@ public:
     vector<bool> isStopVertex;  // Stop or Pass
     vector<double> arrivalTimes;                 // Cost when the vertex was visited
     vector<pair<double, double>> timeWindows;    // Backward and Forward flexibility
+    vector<vector<VertexDistance>> nearestVertices;
 
     Route(const Instance &instance, int id, int vehicleType);
 
     bool realocate(const vector<double> &vertexScores, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, bool &isBest);
     bool tryMakeStop(const vector<double> &vertexScores, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, bool &isBest);
     bool bestInsert(const vector<double> &vertexScores, int numVertices, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, bool &isBest);
+    bool bestInsertNearestVertices(const vector<double> &vertexScores, int numVertices, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, bool &isBest);
     bool intraRouteSwap(const Instance &instance, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, bool &isBest);
     bool outOfRouteSwap(const vector<double> &vertexScores, int numVertices, vector<map<double, int>> &visitedVertices, double &solutionScore, double &solutionCost, int startIndex, int endIndex, bool &isBest);
 
